@@ -1,0 +1,84 @@
+---
+title: "Exploratory Analysis on Accelerometer and GPS Data in Kyrgyzstan"
+author: "Ernest (Jiachang) Xu"
+date: "9/1/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1: Synopsis
+
+The objective of this file is to perform exploratory analysis on accelerometer and GPS data in Kyrgyzstan. This step is crucial to our understanding to the Machine Learning Project. The ultimate goal of the Machine Learning Project is to train independent models to identify different types of road inpediments. This step, exploratory data analysis, give us a sense of how to approach the main problem and picks machine learning models.
+
+# Section 2: Data Processing
+
+Before data cleaning, we need to load the raw dataset from **kyrgyzstan.csv**. We can count the number of rows in the raw dataset, and take a look at the first 10 rows.
+
+```{r data loading, echo=TRUE}
+if (!exists("KG.raw")) {
+    KG.raw <- read.csv("./kyrgyzstan.csv")
+}
+print(nrow(KG.raw))
+head(KG.raw, 10)
+```
+
+# Section 3: Data Cleaning
+
+Let's remove any missing values in the raw dataset.
+
+```{r data cleaning, echo=TRUE}
+KG.valid <- KG.raw[!is.na(KG.raw$Batch.id) & 
+                       !is.na(KG.raw$time) & 
+                       !is.na(KG.raw$Longitude) &
+                       !is.na(KG.raw$Latitude) &
+                       !is.na(KG.raw$x) &
+                       !is.na(KG.raw$y) &
+                       !is.na(KG.raw$z), ]
+KG.valid$Batch.id <- as.factor(KG.valid$Batch.id)
+KG.valid$time <- substr(KG.valid$time, 1, 19)
+KG.valid$time <- as.POSIXct(KG.valid$time, format="%Y-%m-%d %H:%M:%OS")
+print(levels(KG.valid$Batch.id))
+head(KG.valid[KG.valid$Batch.id == "12", ], 10)
+head(KG.valid[KG.valid$Batch.id == "13", ], 10)
+```
+
+# Section 4: Exploratory Data Analysis
+
+```{r exploratory data analysis, echo=TRUE}
+# divide dataset into two groups based on Batch.id (levels = {12, 13})
+KG.batch12 <- KG.valid[KG.valid$Batch.id==12, ]
+KG.batch13 <- KG.valid[KG.valid$Batch.id==13, ]
+# calcualte average accelerations on xyz axis for each second
+KG.x12 <- aggregate(x ~ time, data = KG.batch12, mean)
+KG.y12 <- aggregate(y ~ time, data = KG.batch12, mean)
+KG.z12 <- aggregate(z ~ time, data = KG.batch12, mean)
+KG.x13 <- aggregate(x ~ time, data = KG.batch13, mean)
+KG.y13 <- aggregate(y ~ time, data = KG.batch13, mean)
+KG.z13 <- aggregate(z ~ time, data = KG.batch13, mean)
+# visualize time-series distribution of xyz-axis accelerations
+require(ggplot2)
+plot.x12 <- ggplot(KG.x12, aes(time, x)) + geom_line() + xlab("Time") + ylab("Car 12: X Acceleration") + ggtitle("Time-Series Display of Acceleration on X Axis")
+plot.y12 <- ggplot(KG.y12, aes(time, y)) + geom_line() + xlab("Time") + ylab("Car 12: Y Acceleration") + ggtitle("Time-Series Display of Acceleration on Y Axis")
+plot.z12 <- ggplot(KG.z12, aes(time, z)) + geom_line() + xlab("Time") + ylab("Car 12: Z Acceleration") + ggtitle("Time-Series Display of Acceleration on Z Axis")
+plot.x13 <- ggplot(KG.x13, aes(time, x)) + geom_line() + xlab("Time") + ylab("Car 13: X Acceleration") + ggtitle("Time-Series Display of Acceleration on X Axis")
+plot.y13 <- ggplot(KG.y13, aes(time, y)) + geom_line() + xlab("Time") + ylab("Car 13: Y Acceleration") + ggtitle("Time-Series Display of Acceleration on Y Axis")
+plot.z13 <- ggplot(KG.z13, aes(time, z)) + geom_line() + xlab("Time") + ylab("Car 13: Z Acceleration") + ggtitle("Time-Series Display of Acceleration on Z Axis")
+plot.z13 + annotate("rect", xmin = as.POSIXct("2017-08-09 11:52:15", format="%Y-%m-%d %H:%M:%OS"), 
+                            xmax = as.POSIXct("2017-08-09 11:52:35", format="%Y-%m-%d %H:%M:%OS"), 
+                            ymin = 0.002, ymax = 0.016, alpha = .2) + 
+        annotate("rect", xmin = as.POSIXct("2017-08-09 11:56:35", format="%Y-%m-%d %H:%M:%OS"), 
+                            xmax = as.POSIXct("2017-08-09 11:56:50", format="%Y-%m-%d %H:%M:%OS"), 
+                            ymin = 0.002, ymax = 0.016, alpha = .2) + 
+        annotate("rect", xmin = as.POSIXct("2017-08-09 11:58:15", format="%Y-%m-%d %H:%M:%OS"), 
+                            xmax = as.POSIXct("2017-08-09 11:58:30", format="%Y-%m-%d %H:%M:%OS"), 
+                            ymin = 0.002, ymax = 0.016, alpha = .2)
+```
+
+We can see from the above graph **Time-Series Display of Acceleration on Z Axis** that there are three shaded fractions which strikes out. The overall similar pattern in these three fractions are a sudden decrease of z-axis accelration followed by a sudden increase of z-axis acceleration back to normal reading. These fractions maybe the scenarios when the vehicle drives through a pothole.
+
+# Section 5: Recommendations
+
+Based on the findings from the above Section 4, We recommend to calculate the **time-series jolt** (first derivative of acceleration) for each Batch.id on three axis. When the vehicle is in constant linear motion, the **time-seris jolt** should be slightly fluctuating around a normal reading. If there appears a sudden anormaly reading, then it is probable a pothole/speedbump (z-axis anormaly), a curvature (y-axis anormaly), or an inclination (x-axis and z-axis anormly).
