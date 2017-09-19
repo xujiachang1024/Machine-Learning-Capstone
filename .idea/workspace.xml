@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94cdf0fa-5a9e-4931-8f76-40b11c121f77" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logistic_regression/logistic_vertical.py" afterPath="$PROJECT_DIR$/logistic_regression/logistic_vertical.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,7 +17,7 @@
         <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="443">
-              <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+              <caret line="65" column="47" lean-forward="true" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -393,7 +392,7 @@
     <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
-          <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+          <caret line="65" column="47" lean-forward="true" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
