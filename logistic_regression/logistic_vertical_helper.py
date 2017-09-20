@@ -1,3 +1,7 @@
+# code reference:
+# https://github.com/hhl60492/newton_logistic/blob/master/main.py
+
+
 import pandas as pd
 import numpy as np
 import math
