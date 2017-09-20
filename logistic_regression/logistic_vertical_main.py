@@ -111,7 +111,7 @@ coefs_converged = False  # have we reached convergence?
 
 # Training step: if we haven't reached convergence...
 while not coefs_converged:
-    
+
     # set the old coefficients to our current
     beta_old = beta
 
