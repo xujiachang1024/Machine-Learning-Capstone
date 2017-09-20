@@ -63,7 +63,7 @@ for i in range(epochs):
     data = np.zeros((train_X.shape[1], train_X.shape[0]))  # a zero matrix with shape (train_cols, train_rows)
     sig_der = np.zeros((train_X.shape[0], train_X.shape[0]))  # a zero matrix with shape (train_rows, train_rows)
 
-    # iterate through each row in the train set
+    # row iterator loop
     for j in range(train_X.shape[0]):
 
         # compute sigmoid outputs
@@ -73,3 +73,26 @@ for i in range(epochs):
         # compute gradient vector of negative log likelihood
         data[:, j] = train_X[j].transpose()
         gradient[:, 0] = gradient[:, 0] + np.multiply(train_X[j].transpose(), diff[j])
+
+    print("Epoch %d" % i)
+    print("Train RMSE %0.4f" % np.sqrt(np.dot(diff[j], diff[j]) / len(diff)))
+
+    # compute Hessian
+    sig_der = np.diag(np.multiply(sig_out, np.subtract(1, sig_out)))
+    hess = np.matmul(np.matmul(data, sig_der), np.transpose(data))
+
+    # invert Hessian
+    hess = np.linalg.inv(hess)
+
+    # do the weight update
+    params[:, ] = params[:, ] - step_size * np.matmul(hess, gradient)
+
+    # testing
+    sig_out_test = [0] * test_X.shape[0]
+    diff_test = [0] * test_X.shape[0]
+    for k in range(test_X.shape[0]):
+        # compute sigmoid outputs
+        sig_out_test[k] = sigmoid(np.dot(test_X[k], params[:, ]))
+        diff_test[k] = sig_out[k] - test_Y[k]
+
+    print("Test RMSE %0.4f" % np.sqrt(np.dot(diff_test, diff_test) / len(diff_test)))
