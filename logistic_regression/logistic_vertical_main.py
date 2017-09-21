@@ -1,7 +1,7 @@
 # Dependencies
 import pandas as pd  # data frame
 import numpy as np  # matrix math
-from patsy import dmatrices  # matrix data structure
+import patsy  # matrix data structure
 import warnings  # error logging
 
 
@@ -28,7 +28,7 @@ print(df.head(10))
 
 
 # Split the DataFrame into response variable and independent variables
-y, X = dmatrices(formula, df, return_type='dataframe')
+y, X = patsy.dmatrices(formula, df, return_type='dataframe')
 print(X.head(10))
 
 

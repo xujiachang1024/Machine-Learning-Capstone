@@ -4,27 +4,25 @@
 
 import pandas as pd
 import numpy as np
-import math
 import random
 from sklearn import preprocessing
 
 
 # sigmoid() function: logistic regression curve
 def sigmoid(x):
-    return 1 / (1 + math.exp(-x))
+    return 1 / (1 + np.exp(-x))
 
 
-# TODO: read .csv file
-df = pd.read_csv("./data.csv")
+# Data import and processing
+df = pd.read_csv("./speedbumps.csv")  # read data from the .csv file
+df = df.loc[:, ('speedbump', 'Speed', 'Z', 'z_jolt')]  # only select relevant columns
+keywords = ['yes', 'no']
+mapping = [1, 0];
+df = df.replace(keywords,mapping)
+print(df.head(10))
 
 
-# TODO: convert strings to numerical values
-keywords = ['yes', 'no', 'HTML', 'Plain', 'none', 'big', 'small']
-mapping = [1, 0, 0, 1, 0, 1, 2]
-df = df.replace(keywords, mapping)
-
-
-# TODO: normalize data frame (I don't )
+# TODO: normalize data frame (I don't understand this part yet)
 min_max_scaler = preprocessing.MinMaxScaler()
 np_scaled = min_max_scaler.fit_transform(df)
 df = pd.DataFrame(np_scaled)
