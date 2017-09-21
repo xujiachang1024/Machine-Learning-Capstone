@@ -13,8 +13,8 @@ def sigmoid(x):
 # Hyper-parameter setup
 np.random.seed(0)  # set the seed (reproducibility)
 tol = 1e-8  # convergence tolerance
-lam = None  # L2 regularization
 max_iter = 20  # maximum allowed iterations
+lam = None  # L2 regularization
 formula = ''  # TODO: specify the model that we want to fit
 
 
