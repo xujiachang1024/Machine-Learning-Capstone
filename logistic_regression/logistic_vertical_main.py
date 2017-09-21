@@ -18,9 +18,12 @@ lam = None  # L2 regularization
 formula = 'speedbump ~ Speed + Z + z_jolt'  # TODO: specify the model that we want to fit
 
 
-# Data import
+# Data import and processing
 df = pd.read_csv("./speedbumps.csv")  # read data from the .csv file
 df = df.loc[:, ('speedbump', 'Speed', 'Z', 'z_jolt')]  # only select relevant columns
+keywords = ['yes', 'no']
+mapping = [1, 0];
+df = df.replace(keywords,mapping)
 print(df.head(10))
 
 
@@ -76,7 +79,7 @@ def newton_step(curr, X, lam=None):
 # This function does compute the actual inverse of the Hessian
 @catch_singularity
 def alt_newton_step(curr, X, lam=None):
-    # one naive step of Newton's Method
+    # another naive step of Newton's Method
 
     # compute necessary objects
     p = np.array(sigmoid(X.dot(curr[:, 0])), ndmin=2).T
@@ -122,7 +125,7 @@ while not coefs_converged:
     beta_old = beta
 
     # perform a single step of newton's optimization on our data, set our updated beta values
-    beta = newton_step(beta, X, lam=lam)  # TODO: substitute X according to our data
+    beta = alt_newton_step(beta, X, lam=lam)  # TODO: substitute X according to our data
 
     # increment the number of iterations
     iter_count += 1
