@@ -6,9 +6,6 @@ data = pd.read_csv('../exploratory/campus_speed_bumps.csv')
 data = data[['Date', 'Y', 'Z', "Bump"]]
 D = 2
 
-idx = np.random.choice(len(data[['Y','Z']]), 20, replace=False)
-print (idx)
-
 def tf_train(X_train, y_train, batch_size=20, n_epoch=1000):
     x = tf.placeholder(tf.float32, [None, D])
     y_ = tf.placeholder(tf.float32, [None, 1])
@@ -26,14 +23,17 @@ def tf_train(X_train, y_train, batch_size=20, n_epoch=1000):
     # Train
     for epoch in range(n_epoch):
         idx = np.random.choice(len(X_train), batch_size, replace=False)
-        print(idx)
-        for num in idx:
-            print("index: %d" % num)
-            print(X_train[idx])
         _, l = sess.run([train_step, cross_entropy], feed_dict={x: X_train[idx], y_: y_train[idx]})
         if epoch % 100 == 0:
             print('loss: ' + str(l))
 
     return sess.run(W)
 
-# print(tf_train(data[['Y','Z']], data['Bump']))
+x_temp = np.asmatrix(data[['Y','Z']])
+y_temp = np.transpose(np.asmatrix(data['Bump']))
+
+
+# x_tensor = tf.constant(x_temp, dtype = tf.float32, shape=[data.shape[0], 2])
+# y_tensor = tf.constant(y_temp, 'float32',shape=[data.shape[0], 1])
+
+print(tf_train(X_train=x_temp, y_train=y_temp))
