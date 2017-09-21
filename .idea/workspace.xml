@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="94cdf0fa-5a9e-4931-8f76-40b11c121f77" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py" afterPath="$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py" afterPath="$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/logistic_regression/logistic_newton_example_2.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/logistic_regression/logistic_newton_method.py" afterPath="$PROJECT_DIR$/logistic_regression/logistic_newton_example_1.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py" afterPath="$PROJECT_DIR$/logistic_regression/logistic_vertical_1.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="logistic_vertical_main.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py">
+      <file leaf-file-name="logistic_vertical_1.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="23" lean-forward="true" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
+            <state relative-caret-position="126">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="26" selection-end-column="18" />
               <folding>
                 <element signature="e#15#48#0" expanded="true" />
               </folding>
@@ -26,13 +30,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="logistic_vertical_helper.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py">
+      <file leaf-file-name="logistic_vertical_2.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="81" column="21" lean-forward="true" selection-start-line="81" selection-start-column="21" selection-end-line="81" selection-end-column="21" />
+            <state relative-caret-position="202">
+              <caret line="97" column="33" lean-forward="true" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="33" />
               <folding>
-                <element signature="e#86#105#0" expanded="true" />
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="logistic_newton_example_2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_newton_example_2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="277">
+              <caret line="106" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,8 +82,9 @@
         <option value="$PROJECT_DIR$/logistic_regression/logistic_vertical.py" />
         <option value="$PROJECT_DIR$/logistic_regression/logistic_vertical_newton.py" />
         <option value="$PROJECT_DIR$/logistic_regression/logistic_newton_method.py" />
-        <option value="$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py" />
         <option value="$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py" />
+        <option value="$PROJECT_DIR$/logistic_regression/logistic_newton_helper.py" />
+        <option value="$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py" />
       </list>
     </option>
   </component>
@@ -143,7 +160,24 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.logistic_vertical_main">
+  <component name="RunManager" selected="Python.logistic_vertical_helper">
+    <configuration name="logistic_newton_helper" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/logistic_regression" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Machine-Learning-GPS-Data" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_newton_example_2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <configuration name="logistic_newton_method" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -156,7 +190,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Machine-Learning-GPS-Data" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_newton_method.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_newton_example_1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -190,7 +224,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Machine-Learning-GPS-Data" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -207,42 +241,25 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Machine-Learning-GPS-Data" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="readcsvExample" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="Machine-Learning-GPS-Data" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/readcsvExample.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/logistic_regression/logistic_vertical_1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.readcsvExample" />
-      <item index="1" class="java.lang.String" itemvalue="Python.logistic_template" />
-      <item index="2" class="java.lang.String" itemvalue="Python.logistic_vertical_main" />
-      <item index="3" class="java.lang.String" itemvalue="Python.logistic_newton_method" />
-      <item index="4" class="java.lang.String" itemvalue="Python.logistic_vertical_helper" />
+      <item index="0" class="java.lang.String" itemvalue="Python.logistic_template" />
+      <item index="1" class="java.lang.String" itemvalue="Python.logistic_vertical_main" />
+      <item index="2" class="java.lang.String" itemvalue="Python.logistic_newton_method" />
+      <item index="3" class="java.lang.String" itemvalue="Python.logistic_vertical_helper" />
+      <item index="4" class="java.lang.String" itemvalue="Python.logistic_newton_helper" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.logistic_vertical_main" />
-        <item index="1" class="java.lang.String" itemvalue="Python.logistic_vertical_helper" />
-        <item index="2" class="java.lang.String" itemvalue="Python.logistic_newton_method" />
-        <item index="3" class="java.lang.String" itemvalue="Python.logistic_template" />
-        <item index="4" class="java.lang.String" itemvalue="Python.readcsvExample" />
+        <item index="0" class="java.lang.String" itemvalue="Python.logistic_vertical_helper" />
+        <item index="1" class="java.lang.String" itemvalue="Python.logistic_newton_helper" />
+        <item index="2" class="java.lang.String" itemvalue="Python.logistic_vertical_main" />
+        <item index="3" class="java.lang.String" itemvalue="Python.logistic_newton_method" />
+        <item index="4" class="java.lang.String" itemvalue="Python.logistic_template" />
       </list>
     </recent_temporary>
   </component>
@@ -295,7 +312,7 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="25" column="28" lean-forward="false" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
@@ -305,17 +322,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#86#105#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -325,33 +340,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#86#105#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#86#105#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#86#105#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -476,32 +485,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_newton_method.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_newton_example_1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="25" column="32" lean-forward="true" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
           <folding>
-            <element signature="e#14#32#0" expanded="true" />
+            <element signature="e#14#32#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_helper.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_newton_example_2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="81" column="21" lean-forward="true" selection-start-line="81" selection-start-column="21" selection-end-line="81" selection-end-column="21" />
+        <state relative-caret-position="277">
+          <caret line="106" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
           <folding>
-            <element signature="e#86#105#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_main.py">
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="23" lean-forward="true" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
+        <state relative-caret-position="126">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="26" selection-end-column="18" />
           <folding>
             <element signature="e#15#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logistic_regression/logistic_vertical_2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="97" column="33" lean-forward="true" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
