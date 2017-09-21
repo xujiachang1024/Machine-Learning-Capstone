@@ -15,12 +15,18 @@ np.random.seed(0)  # set the seed (reproducibility)
 tol = 1e-8  # convergence tolerance
 max_iter = 20  # maximum allowed iterations
 lam = None  # L2 regularization
-formula = ''  # TODO: specify the model that we want to fit
+formula = 'speedbump ~ Speed + Z + z_jolt'  # TODO: specify the model that we want to fit
 
 
-# TODO: Data processing
-# TODO: Data cleaning
-# TODO: please refer to logistic_vertical_helper.py
+# Data import
+df = pd.read_csv("./speedbumps.csv")  # read data from the .csv file
+df = df.loc[:, ('speedbump', 'Speed', 'Z', 'z_jolt')]  # only select relevant columns
+print(df.head(10))
+
+
+# Split the DataFrame into response variable and independent variables
+y, X = dmatrices(formula, df, return_type='dataframe')
+print(X.head(10))
 
 
 # Error checking: to catch singular matrix errors
