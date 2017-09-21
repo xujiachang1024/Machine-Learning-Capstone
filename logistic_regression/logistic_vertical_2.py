@@ -75,21 +75,20 @@ for i in range(epochs):
         sig_out[j] = sigmoid(np.dot(trainX[j], params[:,]))
         diff[j] = sig_out[j] - trainY[j]
 
-
-        data[:,j] = trainX[j].transpose()
+        data[:, j] = trainX[j].transpose()
         gradient[:, 0] = gradient[:,0] + np.multiply(trainX[j].transpose(), diff[j])
 
     print("Epoch %d" % i)
     print("Train RMSE %0.4f" % np.sqrt(np.dot(diff[j], diff[j]) / len(diff)))
     # compute Hessian
     sig_der = np.diag(np.multiply(sig_out, np.subtract(1, sig_out)))
-    hess = np.matmul(np.matmul(data,sig_der), np.transpose(data))
+    hess = np.matmul(np.matmul(data, sig_der), np.transpose(data))
 
     # invert Hessian
     hess = np.linalg.inv(hess)
 
     # do the weight update
-    params[:,] = params[:,]  - step_size* np.matmul(hess, gradient)
+    params[:, ] = params[:, ] - step_size * np.matmul(hess, gradient)
 
     # do testing
     sig_out_test = [0] * testX.shape[0]
@@ -100,3 +99,4 @@ for i in range(epochs):
         diff_test[k] = sig_out[k] - testY[k]
 
     print("Test RMSE %0.4f" % np.sqrt(np.dot(diff_test, diff_test) / len(diff_test)))
+    print(params, "\n")
