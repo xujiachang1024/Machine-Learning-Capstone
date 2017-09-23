@@ -22,7 +22,7 @@ formula = 'speedbump ~ Speed + Z + z_jolt'  # TODO: specify the model that we wa
 df = pd.read_csv("./speedbumps.csv")  # read data from the .csv file
 df = df.loc[:, ('speedbump', 'Speed', 'Z', 'z_jolt')]  # only select relevant columns
 keywords = ['yes', 'no']
-mapping = [1, 0];
+mapping = [1, 0]
 df = df.replace(keywords, mapping)
 print(df.head(10))
 
