@@ -1,10 +1,7 @@
 # Dependencies
 import random
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import ShuffleSplit
-from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
 
