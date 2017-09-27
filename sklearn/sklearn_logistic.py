@@ -1,10 +1,11 @@
 # Dependencies
 import random
-import numpy as np
 import pandas as pd
+import numpy as np
+import warnings
+from scipy import stats
+from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import ShuffleSplit
-from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn import preprocessing
 from sklearn.ensemble import ExtraTreesClassifier
@@ -14,42 +15,53 @@ from sklearn import metrics
 
 # Set the seed (reproducibility)
 random.seed(0)
+warnings.filterwarnings('ignore', category=UndefinedMetricWarning)
 
 
 # Data import and cleaning
-df = pd.read_csv("./speedbumps.csv")  # read data from the .csv file
+df1 = pd.read_csv("./speedbumps_1.csv")  # read data from the .csv file
+df2 = pd.read_csv("./speedbumps_2.csv")  # read data from the .csv file
+df3 = pd.read_csv("./speedbumps_3.csv")  # read data from the .csv file
+df4 = pd.read_csv("./speedbumps_4.csv")  # read data from the .csv file
+df = pd.read_csv("./speedbumps_5.csv")  # read data from the .csv file
+df1 = df1.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df2 = df2.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df3 = df3.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df4 = df4.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
 df = df.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
 keywords = ['yes', 'no']
 mapping = [1, 0]
+df1 = df1.replace(keywords, mapping)
+df2 = df2.replace(keywords, mapping)
+df3 = df3.replace(keywords, mapping)
+df4 = df4.replace(keywords, mapping)
 df = df.replace(keywords, mapping)
-print(df.head(10))
+df = df.append(df1)
+df = df.append(df2)
+df = df.append(df3)
+df = df.append(df4)
 
 
 # Separate Y and X variables
 df_label = df.loc[:, 'speedbump']
-df_feature = df.loc[:, ('Speed', 'Z', 'z_jolt')]
+df_feature = df.loc[:, ('Speed', 'X', 'Y', 'Z', 'z_jolt')]
 Y = df_label.as_matrix()
 X = df_feature.as_matrix()
 
 
-# Split to train and test sets
-train_X, test_X, train_Y, test_Y = train_test_split(X, Y, test_size=0.2, shuffle=True)
-
-
 # Dimensionality reduction
-# a_normalized = preprocessing.normalize(preprocessing.scale(X), norm='l2')
-# etc_model = ExtraTreesClassifier()
-# etc_model.fit(a_normalized,Y)
-# print('Feature Importance:')
-# print(etc_model.feature_importances_)
-# pca = PCA(n_components=2)
-# a_pca = pca.fit_transform(a_normalized)
-# train_X, test_X, train_Y, test_Y = train_test_split(a_pca, Y, test_size=0.2, shuffle=True)
+a_normalized = preprocessing.normalize(preprocessing.scale(X), norm='l2')
+etc_model = ExtraTreesClassifier()
+etc_model.fit(a_normalized, Y)
+print('Feature Importance:')
+print(etc_model.feature_importances_)
+pca = PCA(n_components=4)
+a_pca = pca.fit_transform(a_normalized)
 
 
 # Prepare for cross-validation
-clf = LogisticRegression(penalty='l2', tol=1e-8, C=1000, max_iter=1000)
-f1_sum = 0.00  # sum of F1 scores
+clf = LogisticRegression(penalty='l2', tol=1e-3, C=1000, max_iter=1000)
+f1_scores = []  # sum of F1 scores
 cv = 10;  # number of cross-validations
 
 
@@ -67,24 +79,19 @@ for i in range(0, cv, 1):
 
     # calculate the F1 score
     f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
-    f1_sum += f1
+    f1_scores.append(f1)
 
     # calculate the confusion matrix
     matrix = metrics.confusion_matrix(test_Y, predicted_Y)
 
-    # print iterative result
-    print('\n-----------------------------------')
-    print('Iteration ', i)
-    print('Features: speed, Z-accel, Z-jolt')
-    print('Labels: speedbump (1 = yes, 0 = no)')
-    print('F1 score:', f1)
-    print(matrix)
-
 
 # Calculate cross-validation average
-f1_average = f1_sum / cv
 print('\n-----------------------------------')
-print('sklearn Logistic Regression Model')
-print('\tFeatures: speed, Z-accel, Z-jolt')
+print('sklearn.tree.LogisticRegression Model 1')
+print('\tFeatures: speed, X-accel, Y-accel, Z-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
-print('\tAverage F1 score:', f1_average)
+print('\tAverage F1 score:', np.mean(f1_scores))
+print('\tStdDev F1 score:', np.std(f1_scores))
+print('\tMedian F1 score:', np.median(f1_scores))
+print('\tIQR F1 score:', stats.iqr(f1_scores))
+print('\tSkewness F1 score:', stats.skew(f1_scores))
