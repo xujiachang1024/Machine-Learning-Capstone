@@ -26,17 +26,13 @@ df2 = df2.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select
 df3 = df3.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
 df4 = df4.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
 df = df.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
-keywords = ['yes', 'no']
-mapping = [1, 0]
-df1 = df1.replace(keywords, mapping)
-df2 = df2.replace(keywords, mapping)
-df3 = df3.replace(keywords, mapping)
-df4 = df4.replace(keywords, mapping)
-df = df.replace(keywords, mapping)
 df = df.append(df1)
 df = df.append(df2)
 df = df.append(df3)
 df = df.append(df4)
+keywords = ['yes', 'no']
+mapping = [1, 0]
+df = df.replace(keywords, mapping)
 
 
 # Decision Tree Model 1
@@ -50,7 +46,7 @@ X = df_feature.as_matrix()
 # Prepare for cross-validation
 clf = DecisionTreeClassifier()  # create a DecisionTreeClassifier
 f1_scores = []  # sum of F1 scores
-cv = 100;  # number of cross-validations
+cv = 100  # number of cross-validations
 
 
 # Start cross-validation
