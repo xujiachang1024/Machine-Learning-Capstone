@@ -1,6 +1,7 @@
 # Dependencies
 import random
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
@@ -44,7 +45,7 @@ X = df_feature.as_matrix()
 
 # Prepare for cross-validation
 clf = DecisionTreeClassifier()  # create a DecisionTreeClassifier
-f1_sum = 0.00  # sum of F1 scores
+f1_scores = []  # sum of F1 scores
 cv = 100;  # number of cross-validations
 
 
@@ -62,7 +63,7 @@ for i in range(0, cv, 1):
 
     # calculate the F1 score
     f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
-    f1_sum += f1
+    f1_scores.append(f1)
 
     # calculate the confusion matrix
     matrix = metrics.confusion_matrix(test_Y, predicted_Y)
@@ -77,12 +78,11 @@ for i in range(0, cv, 1):
 
 
 # Calculate cross-validation average
-f1_average = f1_sum / cv
 print('\n-----------------------------------')
-print('sklearn Decision Tree Model 1')
+print('sklearn.tree.DecisionTreeClassifier Model 1')
 print('\tFeatures: speed, X-accel, Y-accel, Z-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
-print('\tAverage F1 score:', f1_average)
+print('\tAverage F1 score:', np.mean(f1_scores))
 
 
 # Decision Tree Model 2
@@ -95,8 +95,8 @@ X = df_feature.as_matrix()
 
 # Prepare for cross-validation
 clf = DecisionTreeClassifier()  # create a DecisionTreeClassifier
-f1_sum = 0.00  # sum of F1 scores
-cv = 100;  # number of cross-validations
+f1_scores = []  # sum of F1 scores
+cv = 100  # number of cross-validations
 
 
 # Start cross-validation
@@ -113,7 +113,7 @@ for i in range(0, cv, 1):
 
     # calculate the F1 score
     f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
-    f1_sum += f1
+    f1_scores.append(f1)
 
     # calculate the confusion matrix
     matrix = metrics.confusion_matrix(test_Y, predicted_Y)
@@ -128,12 +128,11 @@ for i in range(0, cv, 1):
 
 
 # Calculate cross-validation average
-f1_average = f1_sum / cv
 print('\n-----------------------------------')
-print('sklearn Decision Tree Model 2')
+print('sklearn.tree.DecisionTreeClassifier Model 2')
 print('\tFeatures: speed, X-accel, Y-accel, Z-accel')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
-print('\tAverage F1 score:', f1_average)
+print('\tAverage F1 score:', np.mean(f1_scores))
 
 
 # Decision Tree Model 3
@@ -146,7 +145,7 @@ X = df_feature.as_matrix()
 
 # Prepare for cross-validation
 clf = DecisionTreeClassifier()  # create a DecisionTreeClassifier
-f1_sum = 0.00  # sum of F1 scores
+f1_scores = []  # sum of F1 scores
 cv = 100;  # number of cross-validations
 
 
@@ -164,7 +163,7 @@ for i in range(0, cv, 1):
 
     # calculate the F1 score
     f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
-    f1_sum += f1
+    f1_scores.append(f1)
 
     # calculate the confusion matrix
     matrix = metrics.confusion_matrix(test_Y, predicted_Y)
@@ -179,9 +178,8 @@ for i in range(0, cv, 1):
 
 
 # Calculate cross-validation average
-f1_average = f1_sum / cv
 print('\n-----------------------------------')
-print('sklearn Decision Tree Model 3')
+print('sklearn.tree.DecisionTreeClassifier Model 3')
 print('\tFeatures: speed, X-accel, Y-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
-print('\tAverage F1 score:', f1_average)
+print('\tAverage F1 score:', np.mean(f1_scores))
