@@ -2,7 +2,7 @@
 Including machine learning models using <a href="http://scikit-learn.org/stable/">scikit-learn</a> library
 
 #### Python Scripts
-* **sklearn_DTClassifier.py**: Decision Tree Classifier\n
+* **sklearn_DTClassifier.py**: Decision Tree Classifier\s\s
   average F1 score of 80~85% from 100-iteration cross-validation
 * **sklearn_ETClassifier.py**: Extra Tree Classifier
   average F1 score of 65~75% from 100-iteration cross-validation
