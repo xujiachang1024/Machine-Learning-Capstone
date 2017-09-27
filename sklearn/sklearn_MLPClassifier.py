@@ -127,93 +127,93 @@ print('\tIQR F1 score:', stats.iqr(f1_scores))
 print('\tSkewness F1 score:', stats.skew(f1_scores))
 
 
-# MLP Neural Network Model 3
-# Separate Y and X variables
-df_label = df.loc[:, 'speedbump']
-df_feature = df.loc[:, ('Speed', 'X', 'Y', 'z_jolt')]
-Y = df_label.as_matrix()
-X = df_feature.as_matrix()
-
-
-# Prepare for cross-validation
-clf = MLPClassifier(solver='lbfgs', alpha=0.0001, hidden_layer_sizes=(5, 2), random_state=0)  # create a MLPClassifier
-f1_scores = []  # sum of F1 scores
-cv = 100  # number of cross-validations
-
-
-# Start cross-validation
-for i in range(0, cv, 1):
-
-    # split to train and test sets
-    train_X, test_X, train_Y, test_Y = train_test_split(X, Y, test_size=0.2, shuffle=True)
-
-    # start training
-    clf = clf.fit(train_X, train_Y)  # fit the training data
-
-    # start testing
-    predicted_Y = clf.predict(test_X)  # predict on the testing data
-
-    # calculate the F1 score
-    f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
-    f1_scores.append(f1)
-
-    # calculate the confusion matrix
-    matrix = metrics.confusion_matrix(test_Y, predicted_Y)
-
-
-# Calculate cross-validation average
-print('\n-----------------------------------')
-print('sklearn.neural_network.MLPClassifier Model 3')
-print('\tFeatures: speed, X-accel, Y-accel, Z-jolt')
-print('\tLabels: speedbump (1 = yes, 0 = no)')
-print('\tAverage F1 score:', np.mean(f1_scores))
-print('\tStdDev F1 score:', np.std(f1_scores))
-print('\tMedian F1 score:', np.median(f1_scores))
-print('\tIQR F1 score:', stats.iqr(f1_scores))
-print('\tSkewness F1 score:', stats.skew(f1_scores))
-
-
-# MLP Neural Network Model 4
-# Separate Y and X variables
-df_label = df.loc[:, 'speedbump']
-df_feature = df.loc[:, ('X', 'Y', 'Z', 'z_jolt')]
-Y = df_label.as_matrix()
-X = df_feature.as_matrix()
-
-
-# Prepare for cross-validation
-clf = MLPClassifier(solver='lbfgs', alpha=0.0001, hidden_layer_sizes=(5, 2), random_state=0)  # create a MLPClassifier
-f1_scores = []  # sum of F1 scores
-cv = 100  # number of cross-validations
-
-
-# Start cross-validation
-for i in range(0, cv, 1):
-
-    # split to train and test sets
-    train_X, test_X, train_Y, test_Y = train_test_split(X, Y, test_size=0.2, shuffle=True)
-
-    # start training
-    clf = clf.fit(train_X, train_Y)  # fit the training data
-
-    # start testing
-    predicted_Y = clf.predict(test_X)  # predict on the testing data
-
-    # calculate the F1 score
-    f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
-    f1_scores.append(f1)
-
-    # calculate the confusion matrix
-    matrix = metrics.confusion_matrix(test_Y, predicted_Y)
-
-
-# Calculate cross-validation average
-print('\n-----------------------------------')
-print('sklearn.neural_network.MLPClassifier Model 4')
-print('\tFeatures: X-accel, Y-accel, Z-accel, Z-jolt')
-print('\tLabels: speedbump (1 = yes, 0 = no)')
-print('\tAverage F1 score:', np.mean(f1_scores))
-print('\tStdDev F1 score:', np.std(f1_scores))
-print('\tMedian F1 score:', np.median(f1_scores))
-print('\tIQR F1 score:', stats.iqr(f1_scores))
-print('\tSkewness F1 score:', stats.skew(f1_scores))
+# # MLP Neural Network Model 3
+# # Separate Y and X variables
+# df_label = df.loc[:, 'speedbump']
+# df_feature = df.loc[:, ('Speed', 'X', 'Y', 'z_jolt')]
+# Y = df_label.as_matrix()
+# X = df_feature.as_matrix()
+#
+#
+# # Prepare for cross-validation
+# clf = MLPClassifier(solver='lbfgs', alpha=0.0001, hidden_layer_sizes=(5, 2), random_state=0)  # create a MLPClassifier
+# f1_scores = []  # sum of F1 scores
+# cv = 100  # number of cross-validations
+#
+#
+# # Start cross-validation
+# for i in range(0, cv, 1):
+#
+#     # split to train and test sets
+#     train_X, test_X, train_Y, test_Y = train_test_split(X, Y, test_size=0.2, shuffle=True)
+#
+#     # start training
+#     clf = clf.fit(train_X, train_Y)  # fit the training data
+#
+#     # start testing
+#     predicted_Y = clf.predict(test_X)  # predict on the testing data
+#
+#     # calculate the F1 score
+#     f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
+#     f1_scores.append(f1)
+#
+#     # calculate the confusion matrix
+#     matrix = metrics.confusion_matrix(test_Y, predicted_Y)
+#
+#
+# # Calculate cross-validation average
+# print('\n-----------------------------------')
+# print('sklearn.neural_network.MLPClassifier Model 3')
+# print('\tFeatures: speed, X-accel, Y-accel, Z-jolt')
+# print('\tLabels: speedbump (1 = yes, 0 = no)')
+# print('\tAverage F1 score:', np.mean(f1_scores))
+# print('\tStdDev F1 score:', np.std(f1_scores))
+# print('\tMedian F1 score:', np.median(f1_scores))
+# print('\tIQR F1 score:', stats.iqr(f1_scores))
+# print('\tSkewness F1 score:', stats.skew(f1_scores))
+#
+#
+# # MLP Neural Network Model 4
+# # Separate Y and X variables
+# df_label = df.loc[:, 'speedbump']
+# df_feature = df.loc[:, ('X', 'Y', 'Z', 'z_jolt')]
+# Y = df_label.as_matrix()
+# X = df_feature.as_matrix()
+#
+#
+# # Prepare for cross-validation
+# clf = MLPClassifier(solver='lbfgs', alpha=0.0001, hidden_layer_sizes=(5, 2), random_state=0)  # create a MLPClassifier
+# f1_scores = []  # sum of F1 scores
+# cv = 100  # number of cross-validations
+#
+#
+# # Start cross-validation
+# for i in range(0, cv, 1):
+#
+#     # split to train and test sets
+#     train_X, test_X, train_Y, test_Y = train_test_split(X, Y, test_size=0.2, shuffle=True)
+#
+#     # start training
+#     clf = clf.fit(train_X, train_Y)  # fit the training data
+#
+#     # start testing
+#     predicted_Y = clf.predict(test_X)  # predict on the testing data
+#
+#     # calculate the F1 score
+#     f1 = metrics.f1_score(test_Y, predicted_Y, average='binary')  # calculate the F1 score
+#     f1_scores.append(f1)
+#
+#     # calculate the confusion matrix
+#     matrix = metrics.confusion_matrix(test_Y, predicted_Y)
+#
+#
+# # Calculate cross-validation average
+# print('\n-----------------------------------')
+# print('sklearn.neural_network.MLPClassifier Model 4')
+# print('\tFeatures: X-accel, Y-accel, Z-accel, Z-jolt')
+# print('\tLabels: speedbump (1 = yes, 0 = no)')
+# print('\tAverage F1 score:', np.mean(f1_scores))
+# print('\tStdDev F1 score:', np.std(f1_scores))
+# print('\tMedian F1 score:', np.median(f1_scores))
+# print('\tIQR F1 score:', stats.iqr(f1_scores))
+# print('\tSkewness F1 score:', stats.skew(f1_scores))
