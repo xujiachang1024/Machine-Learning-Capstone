@@ -44,7 +44,7 @@ X = df_feature.as_matrix()
 
 
 # Prepare for cross-validation
-clf = MLPClassifier(solver='lbfgs', alpha=0.0001, hidden_layer_sizes=(5, 2), random_state=0)  # create a MLPClassifier
+clf = MLPClassifier(solver='lbfgs', alpha=1e-4, hidden_layer_sizes=(5, 2), random_state=0)  # create a MLPClassifier
 f1_scores = []  # sum of F1 scores
 cv = 100  # number of cross-validations
 
