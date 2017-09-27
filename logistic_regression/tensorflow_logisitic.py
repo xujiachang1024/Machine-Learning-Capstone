@@ -26,8 +26,7 @@ def tf_train(X_train, y_train, batch_size=20, n_epoch=1000):
         idx = np.random.choice(len(X_train), batch_size, replace=False)
         _, l = sess.run([train_step, cross_entropy], feed_dict={x: X_train[idx], y_: y_train[idx]})
         if epoch % 100 == 0:
-            print('%d loss: ' + str(l))
-
+            print ('loss: ' + str(l))
     return sess.run(W)
 
 
@@ -52,8 +51,9 @@ print ("\n-------------------")
 # y_test[y_test>0] = 1
 
 y_inferred = sigmoid(x_matrix.dot(weights)) # Get a probability measure given X
-y_inferred[y_inferred>0.5] = 1
-y_inferred[y_inferred<=0.5] = 0
+print(y_inferred[85:95])
+# y_inferred[y_inferred>0.5] = 1
+# y_inferred[y_inferred<=0.5] = 0
 #
-print(np.sum(dep_var))
-print(np.sum(y_inferred))
+# print(np.sum(dep_var))
+# print(np.sum(y_inferred))
