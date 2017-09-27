@@ -183,7 +183,7 @@ X = df_feature.as_matrix()
 
 
 # Prepare for cross-validation
-clf = DecisionTreeClassifier()  # create a DecisionTreeClassifier
+clf = DecisionTreeClassifier(random_state=0)  # create a DecisionTreeClassifier
 f1_scores = []  # sum of F1 scores
 cv = 100;  # number of cross-validations
 
