@@ -1,4 +1,4 @@
-find_speedbump <- function(fileName) {
+find_speedbump <- function(fileName, output) {
     
     # read .csv file
     df <- read.csv(fileName)
@@ -34,5 +34,5 @@ find_speedbump <- function(fileName) {
     print(nrow((speedbumps)))
     
     # write to a new "speedbumps.csv" file
-    write.csv(df, file = "speedbumps.csv")
+    write.csv(df, file = output)
 }
