@@ -71,7 +71,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.ensemble.GradientBoostingClassifier Model 1')
+print('sklearn_Models.ensemble.GradientBoostingClassifier Model 1')
 print('\tFeatures: speed, X-accel, Y-accel, Z-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
@@ -117,7 +117,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.ensemble.GradientBoostingClassifier Model 2')
+print('sklearn_Models.ensemble.GradientBoostingClassifier Model 2')
 print('\tFeatures: speed, X-accel, Y-accel, Z-accel')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
@@ -163,7 +163,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.ensemble.GradientBoostingClassifier Model 3')
+print('sklearn_Models.ensemble.GradientBoostingClassifier Model 3')
 print('\tFeatures: speed, X-accel, Y-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
@@ -209,7 +209,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.ensemble.GradientBoostingClassifier Model 4')
+print('sklearn_Models.ensemble.GradientBoostingClassifier Model 4')
 print('\tFeatures: X-accel, Y-accel, Z-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
