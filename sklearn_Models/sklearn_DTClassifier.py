@@ -8,6 +8,7 @@ from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
+from matplotlib import pyplot
 
 
 # Set the seed (reproducibility)
@@ -71,7 +72,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.tree.DecisionTreeClassifier Model 1')
+print('sklearn_Models.tree.DecisionTreeClassifier Model 1')
 print('\tFeatures: speed, X-accel, Y-accel, Z-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
@@ -79,7 +80,6 @@ print('\tStdDev F1 score:', np.std(f1_scores))
 print('\tMedian F1 score:', np.median(f1_scores))
 print('\tIQR F1 score:', stats.iqr(f1_scores))
 print('\tSkewness F1 score:', stats.skew(f1_scores))
-
 
 
 # Decision Tree Model 2
@@ -118,7 +118,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.tree.DecisionTreeClassifier Model 2')
+print('sklearn_Models.tree.DecisionTreeClassifier Model 2')
 print('\tFeatures: speed, X-accel, Y-accel, Z-accel')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
@@ -164,7 +164,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.tree.DecisionTreeClassifier Model 3')
+print('sklearn_Models.tree.DecisionTreeClassifier Model 3')
 print('\tFeatures: speed, X-accel, Y-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
@@ -210,7 +210,7 @@ for i in range(0, cv, 1):
 
 # Calculate cross-validation average
 print('\n-----------------------------------')
-print('sklearn.tree.DecisionTreeClassifier Model 4')
+print('sklearn_Models.tree.DecisionTreeClassifier Model 4')
 print('\tFeatures: X-accel, Y-accel, Z-accel, Z-jolt')
 print('\tLabels: speedbump (1 = yes, 0 = no)')
 print('\tAverage F1 score:', np.mean(f1_scores))
