@@ -1,5 +1,5 @@
-## sklearn Folder for ML Models
-Including machine learning models using <a href="http://scikit-learn.org/stable/">scikit-learn</a> library
+## sklearn Folder for ML Models (Los Angeles)
+Including machine learning models on Los Angeles data using <a href="http://scikit-learn.org/stable/">scikit-learn</a> library
 
 #### Python Scripts
 * **sklearn_DTClassifier.py**: Decision Tree Classifier
