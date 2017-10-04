@@ -7,6 +7,10 @@ from time import time
 from scipy import stats
 from sklearn.exceptions import UndefinedMetricWarning
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 
 
@@ -34,6 +38,14 @@ keywords = ['yes', 'no']
 mapping = [1, 0]
 df = df.replace(keywords, mapping)
 
+DT_CONST = 0
+RFC_CONST = 1
+GB_CONST = 2
+MLP_CONST = 3
+
+
+MODEL = 3
+
 
 # Separate Y and X variables
 df_label = df.loc[:, 'speedbump']
@@ -43,7 +55,48 @@ X = df_feature.as_matrix()
 
 
 # Create a DecisionTreeClassifier
-clf = DecisionTreeClassifier(random_state=0)
+if(MODEL == DT_CONST):
+    clf = DecisionTreeClassifier(random_state=0)
+
+    # Specify parameters and distributions to sample from
+    param_dist = {"criterion": ["gini", "entropy"],
+                  "splitter": ["best", "random"],
+                  "max_depth": [5, 4, 3, 2, 1, None],
+                  "min_samples_split": [2, 3, 10],
+                  "min_samples_leaf": [1, 3, 10],
+                  "max_features": ["auto", "log2", None]}
+
+elif(MODEL == RFC_CONST):
+    clf = clf = RandomForestClassifier(random_state=0)
+
+    # Specify parameters and distributions to sample from
+    param_dist = {"criterion": ["gini", "entropy"],
+                  "n_estimators": [9,10,11],
+                  "max_depth": [5, 4, 3, 2, 1, None],
+                  "min_samples_split": [2, 3, 10],
+                  "min_samples_leaf": [1, 3, 10],
+                  "max_features": ["auto", "log2", None]}
+
+
+elif(MODEL == GB_CONST):
+    clf = GradientBoostingClassifier(random_state=0)  # create a GradientBoostingClassifier
+
+    # Specify parameters and distributions to sample from
+    param_dist = {"n_estimators": [100, 150, 200],
+                  "max_depth": [5, 4, 3, 2, 1, None],
+                  "min_samples_split": [2, 3, 10],
+                  "min_samples_leaf": [1, 3, 10],
+                  "max_features": ["auto", "log2", None]}
+
+elif(MODEL == MLP_CONST):
+    clf = MLPClassifier(random_state=0)
+
+    # Specify parameters and distributions to sample from
+    param_dist = {"solver": ['lbfgs', 'sgd', 'adam'],
+                  "hidden_layer_sizes": [(5,2), (7,3), (10,2), (100) ],
+                  'learning_rate':['constant', 'invscaling', 'adaptive']}
+
+
 
 
 # Utility function to report best scores
@@ -59,17 +112,9 @@ def report(results, n_top=3):
             print("")
 
 
-# Specify parameters and distributions to sample from
-param_dist = {"criterion": ["gini", "entropy"],
-              "splitter": ["best", "random"],
-              "max_depth": [5, 4, 3, 2, 1, None],
-              "min_samples_split": stats.randint(2, 11),
-              "min_samples_leaf": stats.randint(1, 11),
-              "max_features": ["auto", "log2", None]}
-
 
 # Run randomized search
-n_iter_search = 50
+n_iter_search = 25
 random_search = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_iter_search, scoring='f1')
 start = time()
 random_search.fit(X, Y)
