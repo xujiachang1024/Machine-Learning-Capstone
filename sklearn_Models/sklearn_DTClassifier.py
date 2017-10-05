@@ -44,7 +44,7 @@ X = df_feature.as_matrix()
 
 
 # Prepare for cross-validation
-clf = DecisionTreeClassifier(criterion='entropy', splitter='best', max_features=5, random_state=0, presort=True)
+clf = DecisionTreeClassifier(criterion='gini', splitter='best', max_features=None, max_depth=10, min_samples_leaf= 3,min_samples_split=2, random_state=0, presort=True)
 f1_scores = []  # sum of F1 scores
 cv = 100  # number of cross-validations
 

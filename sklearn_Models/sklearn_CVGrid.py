@@ -11,6 +11,7 @@ from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 
 
@@ -41,9 +42,10 @@ df = df.replace(keywords, mapping)
 
 
 DT_CONST = 0
-RFC_CONST = 1
+RF_CONST = 1
 GB_CONST = 2
 MLP_CONST = 3
+LOG_CONST = 4
 
 MODEL = 2
 
@@ -60,12 +62,12 @@ if(MODEL == DT_CONST):
     # Specify parameters and distributions to sample from
     param_grid = {"criterion": ["gini", "entropy"],
                   "splitter": ["best", "random"],
-                  "max_depth": [5, 4, 3, 2, 1, None],
+                  "max_depth": [10,7,6, None    ],
                   "min_samples_split": [2, 3, 10],
                   "min_samples_leaf": [1, 3, 10],
-                  "max_features": ["auto", "log2", None]}
+                  "max_features": [3, 4, None]}
 
-elif(MODEL == RFC_CONST):
+elif(MODEL == RF_CONST):
     clf = clf = RandomForestClassifier(random_state=0)
 
     # Specify parameters and distributions to sample from
@@ -80,18 +82,29 @@ elif(MODEL == GB_CONST):
     clf = GradientBoostingClassifier(random_state=0)  # create a GradientBoostingClassifier
 
     # Specify parameters and distributions to sample from
-    param_grid = {"n_estimators": [100, 150, 200],
-                  "max_depth": [5, 4, 3, 2, 1, None],
-                  "min_samples_split": [2, 3, 10],
-                  "min_samples_leaf": [1, 3, 10],
-                  "max_features": ["auto", "log2", None]}
+    param_grid = {"learning_rate": [.01, .1, 1],
+                  "n_estimators": [100, 150, 200],
+                  "max_depth": [10, 5, 3, None],
+                  "min_samples_split": [2, 6, 10],
+                  "min_samples_leaf": [1, 6, 10],
+                  "max_features": [3, 4, None]}
 
 elif(MODEL == MLP_CONST):
     clf = MLPClassifier(random_state=0)
 
     # Specify parameters and distributions to sample from
     param_grid = {"solver": ['lbfgs', 'sgd', 'adam'],
-                  "hidden_layer_sizes": [(5,2), (7,3), (10,5) ]}
+                  "hidden_layer_sizes": [(10,5), (15,10), (8,4), (10,3)],
+                  'max_iter': [1000, 2000]}
+
+elif(MODEL == LOG_CONST):
+    clf = LogisticRegression(penalty='l2')
+
+    # Specify parameters and distributions to sample from
+    param_grid = {"solver": ['newton-cg', 'lbfgs', 'sag'],
+                  "max_iter": [100, 1000, 2000],
+                  'multi_class': ['ovr', 'multinomial']}
+
 
 
 # Utility function to report best scores
