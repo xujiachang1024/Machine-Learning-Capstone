@@ -8,19 +8,25 @@
 
 #import "ViewController.h"
 #import <CoreMotion/CoreMotion.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface ViewController (){
     CMMotionManager *motionManager;
+    CLLocationManager *locationManager;
     NSString* filePath;
     NSString *writeString;
-    NSString *speedBump;
-    NSString *potHole;
+    int speedBump;
+    int potHole;
+    double oldx;
+    double oldy;
+    double oldz;
     
 }
 
 @end
 
 @implementation ViewController
+static double const g_force_conversion = 9.80665;
 
 
 - (void)viewDidLoad {
@@ -30,6 +36,11 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"accelerometer-data.csv"];
+    
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    [locationManager requestAlwaysAuthorization];
+    
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         [[NSFileManager defaultManager] createFileAtPath: filePath contents:nil attributes:nil];
@@ -46,9 +57,17 @@
 
 - (IBAction)startButtonTouched:(id)sender {
     if([self.startButton.titleLabel.text isEqualToString:@"Start"]){
-        writeString= @"X, Y, Z, speedbump, pothole\n";
-        speedBump = @"no";
-        potHole = @"no";
+        if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+             [locationManager requestAlwaysAuthorization];
+            return;
+        }
+        [locationManager startUpdatingLocation];
+        writeString= @"longitude, latitude, X, Y, Z, speedbump, pothole\n";
+        speedBump = 0;
+        potHole = 0;
+        oldx = 0;
+        oldy = 0;
+        oldz = 0;
         [self.startButton setTitle:@"Stop" forState:UIControlStateNormal];
         self.startButton.backgroundColor = [UIColor redColor];
         NSLog(@"lets go");
@@ -57,16 +76,27 @@
             
             dispatch_async(dispatch_get_main_queue(),
                            ^{
-                           
-                               double xx = data.acceleration.x;
-                               double yy = data.acceleration.y;
-                               double zz = data.acceleration.z;
                                
-                               NSString *dataString = [NSString stringWithFormat:@"%f, %f, %f, %@, %@\n", xx, yy, zz, speedBump, potHole];
+                               double newx = data.acceleration.x / g_force_conversion;
+                               double newy = data.acceleration.y/ g_force_conversion;
+                               double newz = data.acceleration.z/ g_force_conversion;
+                               
+                               double xx = newx - oldx;
+                               double yy = newy - oldy;
+                               double zz = newz - oldz;
+                               
+                               double longitude = locationManager.location.coordinate.longitude;
+                               double latitude = locationManager.location.coordinate.latitude;
+                               
+                               NSString *dataString = [NSString stringWithFormat:@"%f, %f, %f, %f, %f, %d, %d\n", longitude, latitude, xx, yy, zz, speedBump, potHole];
                                
                                writeString = [writeString stringByAppendingString: dataString];
-                               speedBump = @"no";
-                               potHole = @"no";
+                               
+                               oldx = newx;
+                               oldy = newy;
+                               oldz = newz;
+                               speedBump = 0;
+                               potHole = 0;
                            });
         }];
     }else{
@@ -78,10 +108,10 @@
     }
 }
 - (IBAction)touchedSpeedBump:(id)sender {
-    speedBump = @"yes";
+    speedBump = 1;
 }
 - (IBAction)touchedPothole:(id)sender {
-    potHole = @"yes";
+    potHole = 1;
 }
 - (NSUInteger) supportedInterfaceOrientations {
     // Return a bitmask of supported orientations. If you need more,
