@@ -126,8 +126,8 @@ def report(results, n_top=3):
 
 
 # Run randomized search
-n_iter_search = 100
-random_search = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_iter_search, scoring='f1')
+n_iter_search = 50
+random_search = RandomizedSearchCV(clf, param_distributions=param_dist, cv=10, n_iter=n_iter_search, scoring='f1')
 start = time()
 random_search.fit(X, Y)
 print("RandomizedSearchCV took %.2f seconds for %d candidates parameter settings." % ((time() - start), n_iter_search))

@@ -82,11 +82,10 @@ elif(MODEL == GB_CONST):
     clf = GradientBoostingClassifier(random_state=0)  # create a GradientBoostingClassifier
 
     # Specify parameters and distributions to sample from
-    param_grid = {"learning_rate": [.01, .1, 1],
-                  "n_estimators": [100, 150, 200],
-                  "max_depth": [10, 5, 3, None],
-                  "min_samples_split": [2, 6, 10],
-                  "min_samples_leaf": [1, 6, 10],
+    param_grid = {"n_estimators": [100, 150, 200],
+                  "max_depth": [10, 5, None],
+                  "min_samples_split": [6, 10],
+                  "min_samples_leaf": [6, 10],
                   "max_features": [3, 4, None]}
 
 elif(MODEL == MLP_CONST):
