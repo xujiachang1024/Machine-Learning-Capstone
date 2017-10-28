@@ -1,0 +1,77 @@
+---
+title: "Exploratory Analysis on Los Angeles Road Data"
+author: "USC Machine Learning Team"
+date: "9/10/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1: Synopsis
+
+The objective of this file is to perform exploratory analysis on accelerometer and GPS data collected on October 15th, 2017 in Kenya. More specifically, this file aims to explore the relationship between traveling speed and vertical accelration when the vehicle hits speed bumps.
+
+# Section 2: Data Loading
+
+Before data processign, we need to load the raw dataset from **kenya_oct_15_data_labeled.csv**. We can count the number of rows in the raw dataset, and take a look at the first 10 rows.
+
+```{r data loading, echo=TRUE}
+if (!exists("Kenya.raw")) {
+    Kenya.raw <- read.csv("./kenya_oct_15_data_labeled.csv")
+}
+print(nrow(Kenya.raw))
+head(Kenya.raw, 10)
+```
+
+# Section 3: Data Processing
+
+```{r data cleaning, echo=TRUE}
+for (i in 1:nrow(Kenya.raw)) {
+    if (Kenya.raw$velocity[i]== 0) {
+        Kenya.raw$x_ratio_speed[i] = 0
+    }
+    else {
+        Kenya.raw$x_ratio_speed[i] = Kenya.raw$x_raw[i] / Kenya.raw$velocity[i]
+    }
+    if (Kenya.raw$z_raw[i]== 0) {
+        Kenya.raw$x_ratio_z[i] = 0
+    }
+    else {
+        Kenya.raw$x_ratio_z[i] = Kenya.raw$x_raw[i] / Kenya.raw$z_raw[i]
+        if (Kenya.raw$x_ratio_z[i] > 20) {
+            Kenya.raw$x_ratio_z[i] = 20
+        }
+        if (Kenya.raw$x_ratio_z[i] < -20) {
+            Kenya.raw$x_ratio_z[i] = -20
+        }
+    }
+}
+write.csv(Kenya.raw, file = "./kenya_oct_15_data_processed.csv")
+Kenya.raw$time <- as.POSIXct(Kenya.raw$time, format="%Y-%m-%d %H:%M:%OS")
+Kenya.73 = Kenya.raw[Kenya.raw$Batch_id == 73, ]
+Kenya.75 = Kenya.raw[Kenya.raw$Batch_id == 75, ]
+```
+
+# Section 4: Exploratory Data Analysis
+
+```{r exploratory data analysis, echo=TRUE}
+# data visualization
+require(ggplot2)
+Kenya.73.plot <- ggplot(Kenya.73[1: 500, ], aes(x = time))
+Kenya.73.plot <- Kenya.73.plot + geom_line(aes(y = label, colour = "Label"))
+Kenya.73.plot <- Kenya.73.plot + geom_line(aes(y = x_ratio_z, colour = "Vertical Ratio"))
+#Kenya.73.plot <- Kenya.73.plot + geom_line(aes(y = x_raw, colour = "Vertical Acceleration"))
+#Kenya.73.plot <- Kenya.73.plot + geom_line(aes(y = velocity, colour = "Traveling Speed"))
+Kenya.73.plot <- Kenya.73.plot + scale_y_continuous(sec.axis = sec_axis(~.*1, name = "Vertical Ratio"))
+Kenya.73.plot <- Kenya.73.plot + scale_colour_manual(values = c("firebrick", "springgreen4"))
+Kenya.73.plot <- Kenya.73.plot + labs(y = "Label", x = "Date and Time", colour = "Parameter")
+print(Kenya.73.plot)
+```
+
+We can see from the above graph **Los Angeles Road Data Session #5: Time-Series Display of Z Acceleration** that there are three shaded fractions which strikes out. The overall similar pattern in these three shaded areas is the anormaly in the reading of Z acceleration. According to the test driver Ernest, in the shared areas **Speedbump #1 & #2** and **Speedbump #3 & #4**, the accelerometer read an anormaly followed by a much larger anormaly, because Ernest was stepping on the gas. Cross-referencing with the Speed graph. We find that speed might be a factor of the scale of change to Z acceleration when the vehicle hits a speedbump.
+
+# Section 5: Recommendations
+
+Based on the findings from the Section 4, We think it will be a good start to model a logistic regression on Z acceleration to identify speedbumps. If this method shows promise, we can apply it on potholes as well.
