@@ -50,7 +50,9 @@ for (i in 1:nrow(Kenya.73)) {
 }
 ```
 
-```{r exploratory data analysis 1.1, echo=FALSE}
+\pagebreak
+
+```{r exploratory data analysis 1.1, echo=TRUE}
 require(ggplot2)
 Kenya.73.sq_vert_accel_ratio_speed.plot <- ggplot(Kenya.73[1:500, ], aes(x = time))
 Kenya.73.sq_vert_accel_ratio_speed.plot <- Kenya.73.sq_vert_accel_ratio_speed.plot + geom_line(aes(y = sq_vert_accel_ratio_speed))
@@ -70,9 +72,12 @@ for (i in 1:500) {
 print(Kenya.73.sq_vert_accel_ratio_speed.plot)
 ```
 
+Note: Speed bumps are labeled as red dots on the graph. \newline 
+Note: Potholes are labeled as orange dots on the grpah. \newline 
+
 \pagebreak
 
-```{r exploratory data analysis 1.2, echo=FALSE}
+```{r exploratory data analysis 1.2, echo=TRUE}
 require(ggplot2)
 Kenya.73.sq_vert_accel_ratio_speed.plot <- ggplot(Kenya.73[501:1000, ], aes(x = time))
 Kenya.73.sq_vert_accel_ratio_speed.plot <- Kenya.73.sq_vert_accel_ratio_speed.plot + geom_line(aes(y = sq_vert_accel_ratio_speed))
@@ -92,6 +97,9 @@ for (i in 501:1000) {
 print(Kenya.73.sq_vert_accel_ratio_speed.plot)
 ```
 
+Note: Speed bumps are labeled as red dots on the graph. \newline 
+Note: Potholes are labeled as orange dots on the grpah. \newline 
+
 \pagebreak 
 
 ## Epoch 2: Display of Ratio betwwen Vertical Jolt and Speed
@@ -110,7 +118,9 @@ for (i in 1:nrow(Kenya.73)) {
 }
 ```
 
-```{r exploratory data analysis 2.1, echo=FALSE}
+\pagebreak
+
+```{r exploratory data analysis 2.1, echo=TRUE}
 require(ggplot2)
 Kenya.73.sq_vert_jolt_ratio_speed.plot <- ggplot(Kenya.73[1:500, ], aes(x = time))
 Kenya.73.sq_vert_jolt_ratio_speed.plot <- Kenya.73.sq_vert_jolt_ratio_speed.plot + geom_line(aes(y = sq_vert_jolt_ratio_speed))
@@ -130,9 +140,12 @@ for (i in 1:500) {
 print(Kenya.73.sq_vert_jolt_ratio_speed.plot)
 ```
 
+Note: Speed bumps are labeled as red dots on the graph. \newline 
+Note: Potholes are labeled as orange dots on the grpah. \newline 
+
 \pagebreak 
 
-```{r exploratory data analysis 2.2, echo=FALSE}
+```{r exploratory data analysis 2.2, echo=TRUE}
 require(ggplot2)
 Kenya.73.sq_vert_jolt_ratio_speed.plot <- ggplot(Kenya.73[501:1000, ], aes(x = time))
 Kenya.73.sq_vert_jolt_ratio_speed.plot <- Kenya.73.sq_vert_jolt_ratio_speed.plot + geom_line(aes(y = sq_vert_jolt_ratio_speed))
@@ -152,6 +165,9 @@ for (i in 501:1000) {
 print(Kenya.73.sq_vert_jolt_ratio_speed.plot)
 ```
 
+Note: Speed bumps are labeled as red dots on the graph. \newline 
+Note: Potholes are labeled as orange dots on the grpah. \newline 
+
 \pagebreak 
 
 ## Epoch 3: Display of 5-Sliding-Window Statistics of Vertical Jolt
@@ -165,10 +181,8 @@ print(Kenya.73.sq_vert_jolt_ratio_speed.plot)
 # calculate 5-sliding-window mean of vertical jolt
 for (i in 3:nrow(Kenya.73)-2) {
     Kenya.73$vert_jolt_mean[i] = mean(c(Kenya.73$vert_jolt[i-2], 
-                                        Kenya.73$vert_jolt[i-1], 
-                                        Kenya.73$vert_jolt[i], 
-                                        Kenya.73$vert_jolt[i+1], 
-                                        Kenya.73$vert_jolt[i+2]))
+        Kenya.73$vert_jolt[i-1], Kenya.73$vert_jolt[i], 
+        Kenya.73$vert_jolt[i+1], Kenya.73$vert_jolt[i+2]))
 }
 Kenya.73$vert_jolt_mean[1] = 0
 Kenya.73$vert_jolt_mean[2] = 0
@@ -177,10 +191,8 @@ Kenya.73$vert_jolt_mean[nrow(Kenya.73)] = 0
 # calculate 5-sliding-window standard deviation of vertical jolt
 for (i in 3:nrow(Kenya.73)-2) {
     Kenya.73$vert_jolt_sd[i] = sd(c(Kenya.73$vert_jolt[i-2], 
-                                        Kenya.73$vert_jolt[i-1], 
-                                        Kenya.73$vert_jolt[i], 
-                                        Kenya.73$vert_jolt[i+1], 
-                                        Kenya.73$vert_jolt[i+2]))
+        Kenya.73$vert_jolt[i-1], Kenya.73$vert_jolt[i], 
+        Kenya.73$vert_jolt[i+1], Kenya.73$vert_jolt[i+2]))
 }
 Kenya.73$vert_jolt_sd[1] = 0
 Kenya.73$vert_jolt_sd[2] = 0
@@ -189,10 +201,8 @@ Kenya.73$vert_jolt_sd[nrow(Kenya.73)] = 0
 # calculate 5-sliding-window minimum of vertical jolt
 for (i in 3:nrow(Kenya.73)-2) {
     Kenya.73$vert_jolt_min[i] = min(c(Kenya.73$vert_jolt[i-2], 
-                                        Kenya.73$vert_jolt[i-1], 
-                                        Kenya.73$vert_jolt[i], 
-                                        Kenya.73$vert_jolt[i+1], 
-                                        Kenya.73$vert_jolt[i+2]))
+        Kenya.73$vert_jolt[i-1], Kenya.73$vert_jolt[i], 
+        Kenya.73$vert_jolt[i+1], Kenya.73$vert_jolt[i+2]))
 }
 Kenya.73$vert_jolt_min[1] = 0
 Kenya.73$vert_jolt_min[2] = 0
@@ -201,16 +211,16 @@ Kenya.73$vert_jolt_min[nrow(Kenya.73)] = 0
 # calculate 5-sliding-window maxium of vertical jolt
 for (i in 3:nrow(Kenya.73)-2) {
     Kenya.73$vert_jolt_max[i] = max(c(Kenya.73$vert_jolt[i-2], 
-                                        Kenya.73$vert_jolt[i-1], 
-                                        Kenya.73$vert_jolt[i], 
-                                        Kenya.73$vert_jolt[i+1], 
-                                        Kenya.73$vert_jolt[i+2]))
+        Kenya.73$vert_jolt[i-1], Kenya.73$vert_jolt[i], 
+        Kenya.73$vert_jolt[i+1], Kenya.73$vert_jolt[i+2]))
 }
 Kenya.73$vert_jolt_max[1] = 0
 Kenya.73$vert_jolt_max[2] = 0
 Kenya.73$vert_jolt_max[nrow(Kenya.73) - 1] = 0
 Kenya.73$vert_jolt_max[nrow(Kenya.73)] = 0
 ```
+
+\pagebreak 
 
 ```{r exploratory data analysis 3.1, echo=TRUE}
 require(ggplot2)
@@ -237,6 +247,9 @@ for (i in 1:500) {
 print(Kenya.73.vert_jolt_5.plot)
 ```
 
+Note: Speed bumps are labeled as red dots on the graph. \newline 
+Note: Potholes are labeled as orange dots on the grpah. \newline 
+
 \pagebreak 
 
 ```{r exploratory data analysis 3.2, echo=TRUE}
@@ -262,4 +275,87 @@ for (i in 501:1000) {
     }
 }
 print(Kenya.73.vert_jolt_5.plot)
+```
+
+Note: Speed bumps are labeled as red dots on the graph. \newline 
+Note: Potholes are labeled as orange dots on the grpah. \newline 
+
+\pagebreak 
+
+## Epoch 4: Display of Traveling Speed, Vertical Acceleration, and Vertical Jolt
+
+```{r exploratory data analysis 4.1, echo=TRUE}
+require(ggplot2)
+Kenya.73.vaj.plot <- ggplot(Kenya.73[501:1000, ], aes(x = time))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = Speed, colour = "Traveling Speed"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = vert_jolt * 100, colour = "Vertical Jolt"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + scale_colour_manual(values = c("darkorchid4", "blue4", "chartreuse4"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + theme(legend.position = c(0.8, 0.925))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + xlab("Time") 
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + ylab("Speed, Vert. Accel., and Vert. Jolt") 
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + ggtitle("Traveling Speed, Vertical Acceleration, and Vertical Jolt")
+for (i in 501:1000) {
+    if (Kenya.73$label[i] == 1) {
+         Kenya.73.vaj.plot <- Kenya.73.vaj.plot + 
+             annotate("pointrange", x = Kenya.73$time[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
+    if (Kenya.73$label[i] == 2) {
+        Kenya.73.vaj.plot <- Kenya.73.vaj.plot + 
+             annotate("pointrange", x = Kenya.73$time[i], y = 0, ymin = 0, ymax = 0, colour = "darkorange2", size = 0.25)
+    }
+}
+print(Kenya.73.vaj.plot)
+```
+
+\pagebreak 
+
+```{r exploratory data analysis 4.2, echo=TRUE}
+require(ggplot2)
+Kenya.73.vaj.plot <- ggplot(Kenya.73[1001:1500, ], aes(x = time))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = Speed, colour = "Traveling Speed"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = vert_jolt * 100, colour = "Vertical Jolt"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + scale_colour_manual(values = c("darkorchid4", "blue4", "chartreuse4"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + theme(legend.position = c(0.8, 0.925))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + xlab("Time") 
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + ylab("Speed, Vert. Accel., and Vert. Jolt") 
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + ggtitle("Traveling Speed, Vertical Acceleration, and Vertical Jolt")
+for (i in 1001:1500) {
+    if (Kenya.73$label[i] == 1) {
+         Kenya.73.vaj.plot <- Kenya.73.vaj.plot + 
+             annotate("pointrange", x = Kenya.73$time[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
+    if (Kenya.73$label[i] == 2) {
+        Kenya.73.vaj.plot <- Kenya.73.vaj.plot + 
+             annotate("pointrange", x = Kenya.73$time[i], y = 0, ymin = 0, ymax = 0, colour = "darkorange2", size = 0.25)
+    }
+}
+print(Kenya.73.vaj.plot)
+```
+
+\pagebreak 
+
+```{r exploratory data analysis 4.3, echo=TRUE}
+require(ggplot2)
+Kenya.73.vaj.plot <- ggplot(Kenya.73[1:500, ], aes(x = time))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = Speed, colour = "Traveling Speed"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + geom_line(aes(y = vert_jolt * 100, colour = "Vertical Jolt"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + scale_colour_manual(values = c("darkorchid4", "blue4", "chartreuse4"))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + theme(legend.position = c(0.8, 0.925))
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + xlab("Time") 
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + ylab("Speed, Vert. Accel., and Vert. Jolt") 
+Kenya.73.vaj.plot <- Kenya.73.vaj.plot + ggtitle("Traveling Speed, Vertical Acceleration, and Vertical Jolt")
+for (i in 1:500) {
+    if (Kenya.73$label[i] == 1) {
+         Kenya.73.vaj.plot <- Kenya.73.vaj.plot + 
+             annotate("pointrange", x = Kenya.73$time[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
+    if (Kenya.73$label[i] == 2) {
+        Kenya.73.vaj.plot <- Kenya.73.vaj.plot + 
+             annotate("pointrange", x = Kenya.73$time[i], y = 0, ymin = 0, ymax = 0, colour = "darkorange2", size = 0.25)
+    }
+}
+print(Kenya.73.vaj.plot)
 ```

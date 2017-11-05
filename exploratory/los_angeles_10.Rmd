@@ -64,7 +64,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.vert_accel_G.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -91,7 +91,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.vert_accel.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -125,7 +125,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.vert_accel_ratio_speed.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -159,7 +159,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.sq_vert_accel_ratio_speed.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -193,7 +193,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.vert_jolt.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -227,7 +227,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.vert_jolt_ratio_speed.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -261,7 +261,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.sq_vert_jolt_ratio_speed.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak
 
@@ -342,7 +342,7 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 print(LA10.vert_jolt_5.plot)
 ```
 
-Note: Speed bumps are labeled as red points on the graph.
+Note: Speed bumps are labeled as <span style="color:red">red</span> points on the graph.
 
 \pagebreak 
 
