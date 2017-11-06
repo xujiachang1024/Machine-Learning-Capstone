@@ -55,10 +55,12 @@ for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)
 ```{r exploratory data analysis 1, echo=FALSE}
 require(ggplot2)
 LA10.vert_accel_G.plot <- ggplot(LA10.valid, aes(x = Date))
-LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + geom_line(aes(y = vert_accel_G))
+LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + geom_line(aes(y = vert_accel_G, colour = "Vert. Accel. with -1G"))
+LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + scale_colour_manual(values = c("darkorchid4"))
 LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + xlab("Time") 
 LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + ylab("Vertical Acceleration (G-Force)") 
 LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + ggtitle("Time-Indexed Vertical Acceleration with Natural Gravity")
+LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + theme(legend.position = c(0.8, 0.9))
 for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
     LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + 
         annotate("pointrange", x = LA10.valid$Date[i], y = -1, ymin = -1, ymax = -1, colour = "red", size = 0.25)
@@ -85,7 +87,7 @@ LA10.vert_accel.plot <- ggplot(LA10.valid, aes(x = Date))
 LA10.vert_accel.plot <- LA10.vert_accel.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
 LA10.vert_accel.plot <- LA10.vert_accel.plot + geom_line(aes(y = Speed / 10, colour = "Traveling Speed"))
 LA10.vert_accel.plot <- LA10.vert_accel.plot + scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Traveling Speed (m/s)"))
-LA10.vert_accel.plot <- LA10.vert_accel.plot + scale_colour_manual(values = c("deepskyblue", "black"))
+LA10.vert_accel.plot <- LA10.vert_accel.plot + scale_colour_manual(values = c("deepskyblue", "darkorchid4"))
 LA10.vert_accel.plot <- LA10.vert_accel.plot + xlab("Time") 
 LA10.vert_accel.plot <- LA10.vert_accel.plot + ylab("Vertical Acceleration (G-Force)") 
 LA10.vert_accel.plot <- LA10.vert_accel.plot + ggtitle("Time-Indexed Vertical Acceleration without Natural Gravity")
@@ -123,7 +125,7 @@ LA10.vert_accel_ratio_speed.plot <- ggplot(LA10.valid, aes(x = Date))
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + geom_line(aes(y = vert_accel_ratio_speed, colour = "Ratio of Vert. Accel. and Speed"))
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + geom_line(aes(y = Speed / 100, colour = "Traveling Speed"))
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*100, name = "Traveling Speed (m/s)"))
-LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + scale_colour_manual(values = c("black", "deepskyblue"))
+LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + xlab("Time") 
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + ylab("Ratio of Vert. Accel. and Speed") 
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Acceleration and Speed")
@@ -161,7 +163,7 @@ LA10.sq_vert_accel_ratio_speed.plot <- ggplot(LA10.valid, aes(x = Date))
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + geom_line(aes(y = sq_vert_accel_ratio_speed, colour = "Ratio of Sq. Vert. Accel. and Speed"))
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*50, name = "Traveling Speed (m/s)"))
-LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + scale_colour_manual(values = c("black", "deepskyblue"))
+LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + xlab("Time") 
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + ylab("Ratio of Sq. Vert. Accel. and Speed") 
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Acceleration and Speed")
@@ -199,7 +201,7 @@ LA10.vert_jolt.plot <- ggplot(LA10.valid, aes(x = Date))
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + geom_line(aes(y = vert_jolt, colour = "Vertical Jolt"))
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + geom_line(aes(y = Speed / 10, colour = "Traveling Speed"))
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Traveling Speed (m/s)"))
-LA10.vert_jolt.plot <- LA10.vert_jolt.plot + scale_colour_manual(values = c("deepskyblue", "black"))
+LA10.vert_jolt.plot <- LA10.vert_jolt.plot + scale_colour_manual(values = c("deepskyblue", "darkorchid4"))
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + xlab("Time") 
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + ylab("Vertical Jolt (G-Force)") 
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + ggtitle("Time-Indexed Vertical Jolt (Incremental)")
@@ -237,7 +239,7 @@ LA10.vert_jolt_ratio_speed.plot <- ggplot(LA10.valid, aes(x = Date))
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + geom_line(aes(y = vert_jolt_ratio_speed, colour = "Ratio of Vert. Jolt and Speed"))
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + geom_line(aes(y = Speed / 100, colour = "Traveling Speed"))
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*100, name = "Traveling Speed (m/s)"))
-LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + scale_colour_manual(values = c("black", "deepskyblue"))
+LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + xlab("Time") 
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + ylab("Ratio of Vert. Jolt and Speed") 
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Jolt and Speed")
@@ -275,7 +277,7 @@ LA10.sq_vert_jolt_ratio_speed.plot <- ggplot(LA10.valid, aes(x = Date))
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + geom_line(aes(y = sq_vert_jolt_ratio_speed, colour = "Ratio of Sq. Vert. Jolt and Speed"))
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*50, name = "Traveling Speed (m/s)"))
-LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + scale_colour_manual(values = c("black", "deepskyblue"))
+LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + xlab("Time") 
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + ylab("Ratio of Sq. Vert. Jolt and Speed") 
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Jolt and Speed")
@@ -297,6 +299,7 @@ Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
 **vert_jolt_sd**: 5-sliding-window standard deviation of vertical jolt \newline 
 **vert_jolt_min**: 5-sliding-window minimum of vertical jolt \newline 
 **vert_jolt_max**: 5-sliding-window maximum of vertical jolt \newline 
+**vert_jolt_range**: 5-sliding-window range of vertical jolt \newline 
 
 ```{r data cleaning 8, echo=TRUE}
 # calculate 5-sliding-window mean of vertical jolt
@@ -347,12 +350,14 @@ LA10.valid$vert_jolt_max[1] = 0
 LA10.valid$vert_jolt_max[2] = 0
 LA10.valid$vert_jolt_max[nrow(LA10.valid) - 1] = 0
 LA10.valid$vert_jolt_max[nrow(LA10.valid)] = 0
+# calculate 5-sliding-window range of vertical jolt
+LA10.valid$vert_jolt_range = LA10.valid$vert_jolt_max - LA10.valid$vert_jolt_min
 ```
 
 ```{r exploratory data analysis 8, echo=FALSE}
 require(ggplot2)
 LA10.vert_jolt_5.plot <- ggplot(LA10.valid, aes(x = Date))
-LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_max - vert_jolt_min, colour = "Range (sky blue)"))
+LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_range, colour = "Range (sky blue)"))
 LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_mean, colour = "Mean (dark blue)"))
 LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_sd, colour = "Standard Deviation (orange)"))
 LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_min, colour = "Minimum (green)"))
@@ -419,6 +424,7 @@ Note: Speed bumps are labeled as $\color{red}red$ points on the graph. \newline
 **vert_jolt_sd**: 5-sliding-window standard deviation of vertical jolt \newline 
 **vert_jolt_min**: 5-sliding-window minimum of vertical jolt \newline 
 **vert_jolt_max**: 5-sliding-window maximum of vertical jolt \newline 
+**vert_jolt_range**: 5-sliding-window range of vertical jolt \newline 
 
 ```{r data writing, echo=TRUE}
 jpeg("./Epoch1_LA10.vert_accel_G.plot.jpeg", width = 1200, height = 750, units = "px")
