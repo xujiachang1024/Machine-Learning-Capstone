@@ -62,13 +62,13 @@ if(MODEL == DT_CONST):
     # Specify parameters and distributions to sample from
     param_grid = {"criterion": ["gini", "entropy"],
                   "splitter": ["best", "random"],
-                  "max_depth": [10,7,6, None    ],
+                  "max_depth": [10,7,6, None],
                   "min_samples_split": [2, 3, 10],
                   "min_samples_leaf": [1, 3, 10],
                   "max_features": [3, 4, None]}
 
 elif(MODEL == RF_CONST):
-    clf = clf = RandomForestClassifier(random_state=0)
+    clf = RandomForestClassifier(random_state=0)
 
     # Specify parameters and distributions to sample from
     param_grid = {"criterion": ["gini", "entropy"],
@@ -103,7 +103,6 @@ elif(MODEL == LOG_CONST):
     param_grid = {"solver": ['newton-cg', 'lbfgs', 'sag'],
                   "max_iter": [100, 1000, 2000],
                   'multi_class': ['ovr', 'multinomial']}
-
 
 
 # Utility function to report best scores
