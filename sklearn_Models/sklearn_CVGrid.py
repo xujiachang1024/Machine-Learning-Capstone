@@ -22,20 +22,15 @@ warnings.filterwarnings('ignore', category=UndefinedMetricWarning)
 
 
 # Data import and cleaning
-# df1 = pd.read_csv("./speedbumps_1.csv")  # read data from the .csv file
-# df2 = pd.read_csv("./speedbumps_2.csv")  # read data from the .csv file
-# df3 = pd.read_csv("./speedbumps_3.csv")  # read data from the .csv file
-# df4 = pd.read_csv("./speedbumps_4.csv")  # read data from the .csv file
+df1 = pd.read_csv("./los_angeles_11_labeled.csv")  # read data from the .csv file
+df2 = pd.read_csv("./los_angeles_12_labeled.csv")  # read data from the .csv file
+df3 = pd.read_csv("./los_angeles_13_labeled.csv")  # read data from the .csv file
+df4 = pd.read_csv("./los_angeles_14_labeled.csv")  # read data from the .csv file
 df = pd.read_csv("./los_angeles_10_labeled.csv")  # read data from the .csv file
-# df1 = df1.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
-# df2 = df2.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
-# df3 = df3.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
-# df4 = df4.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
-# df = df.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
-# df = df.append(df1)
-# df = df.append(df2)
-# df = df.append(df3)
-# df = df.append(df4)
+df = df.append(df1)
+df = df.append(df2)
+df = df.append(df3)
+df = df.append(df4)
 keywords = ['yes', 'no']
 mapping = [1, 0]
 df = df.replace(keywords, mapping)
@@ -51,7 +46,7 @@ MODEL = 0
 
 # Separate Y and X variables
 df_label = df.loc[:, 'speedbump']
-df_feature = df.loc[:, ('Speed', 'vert_accel', 'vert_jolt', 'sq_vert_accel_ratio_speed', 'sq_vert_jolt_ratio_speed')]
+df_feature = df.loc[:, ('Speed', 'vert_accel', 'vert_jolt', 'vert_accel_ratio_speed', 'sq_vert_accel_ratio_speed', 'vert_jolt_ratio_speed', 'sq_vert_jolt_ratio_speed')]
 Y = df_label.as_matrix()
 X = df_feature.as_matrix()
 
