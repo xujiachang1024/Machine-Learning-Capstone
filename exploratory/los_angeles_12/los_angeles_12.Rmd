@@ -30,22 +30,27 @@ Data Cleaning & Exploratory Analysis are iterative, starting at next page.
 ## Epoch 1: Display of Vertical Acceleration with Natural Gravity
 
 **Date**: the time stamp of a data point \newline 
-**Latitude**: \newline 
-**Longitude**: \newline 
 **Speed**: traveling speed of the vehicle \newline 
-**speedbump**: whether this data point is a speedbump \newline
 **forw_accel**: forward acceleration (front and back) of the vehicle \newline 
 **hori_accel**: horizontal acceleration (left and right) of the vehicle \newline 
-**vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline
+**vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline 
+**speedbump**: whether this data point is a speedbump \newline 
 
 ```{r data cleaning 1, echo=TRUE}
-LA12.valid = LA12.raw[, c("Date", "Latitude", "Longitude", "Speed", "speedbump")]
+LA12.valid = LA12.raw[, c("Date", "Latitude", "Longitude", "Speed")]
 # validate DateTime format
 LA12.valid$Date <- as.POSIXct(LA12.valid$Date, format="%Y-%m-%d %H:%M:%OS")
 # specify orientation of accelration
 LA12.valid$forw_accel = LA12.raw$X
 LA12.valid$hori_accel = LA12.raw$Y
 LA12.valid$vert_accel_G = LA12.raw$Z
+# mark speed bumps
+for (i in 1:nrow(LA12.valid)) {
+    LA12.valid$speedbump[i] = "no"
+}
+for (i in c(109)) {
+    LA12.valid$speedbump[i] = "yes"
+}
 ```
 
 ```{r exploratory data analysis 1, echo=FALSE}

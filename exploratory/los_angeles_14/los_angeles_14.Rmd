@@ -30,22 +30,27 @@ Data Cleaning & Exploratory Analysis are iterative, starting at next page.
 ## Epoch 1: Display of Vertical Acceleration with Natural Gravity
 
 **Date**: the time stamp of a data point \newline 
-**Latitude**: \newline 
-**Longitude**: \newline 
 **Speed**: traveling speed of the vehicle \newline 
-**speedbump**: whether this data point is a speedbump \newline
 **forw_accel**: forward acceleration (front and back) of the vehicle \newline 
 **hori_accel**: horizontal acceleration (left and right) of the vehicle \newline 
-**vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline
+**vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline 
+**speedbump**: whether this data point is a speedbump \newline 
 
 ```{r data cleaning 1, echo=TRUE}
-LA14.valid = LA14.raw[, c("Date", "Latitude", "Longitude", "Speed", "speedbump")]
+LA14.valid = LA14.raw[, c("Date", "Latitude", "Longitude", "Speed")]
 # validate DateTime format
 LA14.valid$Date <- as.POSIXct(LA14.valid$Date, format="%Y-%m-%d %H:%M:%OS")
 # specify orientation of accelration
 LA14.valid$forw_accel = LA14.raw$X
 LA14.valid$hori_accel = LA14.raw$Y
 LA14.valid$vert_accel_G = LA14.raw$Z
+# mark speed bumps
+for (i in 1:nrow(LA14.valid)) {
+    LA14.valid$speedbump[i] = "no"
+}
+for (i in c(162, 163, 164, 186)) {
+    LA14.valid$speedbump[i] = "yes"
+}
 ```
 
 ```{r exploratory data analysis 1, echo=FALSE}
@@ -394,7 +399,7 @@ Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
 
 ```{r exploratory data analysis 9, echo=FALSE}
 require(ggplot2)
-LA14.comparative.plot <- ggplot(LA14.valid, aes(x = Date))
+LA14.comparative.plot <- ggplot(LA14.valid[150:190, ], aes(x = Date))
 LA14.comparative.plot <- LA14.comparative.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
 #LA14.comparative.plot <- LA14.comparative.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
 #LA14.comparative.plot <- LA14.comparative.plot + geom_line(aes(y = vert_jolt, colour = "Vertical Jolt"))
