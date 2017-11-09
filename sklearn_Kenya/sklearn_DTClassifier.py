@@ -34,6 +34,15 @@ keywords = ['yes', 'no']
 mapping = [1, 0]
 df = df.replace(keywords, mapping)
 
+df_test = pd.read_csv("./speedbumps_6.csv")
+df_test = df_test.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]
+df_test = df_test.replace(keywords, mapping)
+testY = df_test.loc[:, 'speedbump']
+testX = df_test.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]
+
+
+
+
 # Decision Tree Model 1
 # Separate Y and X variables
 df_label = df.loc[:, 'speedbump']
@@ -44,36 +53,50 @@ feature1 = "X"
 feature2 = "Y"
 feature3 = "Z"
 feature4 = "Speed"
-feature5 = ""
+feature5 = "z_jolt"
 feature6 = ""
 
 for i in range(1,numPoints+1):
     if feature1 != "":
         new_feature = (feature1, i)
         df_feature[new_feature] = df_feature[feature1].shift(i)
+        testX[new_feature] = testX[feature1].shift(i)
     if feature2 != "":
         new_feature = (feature2, i)
         df_feature[new_feature] = df_feature[feature2].shift(i)
+        testX[new_feature] = testX[feature2].shift(i)
     if feature3 != "":
         new_feature = (feature3, i)
         df_feature[new_feature] = df_feature[feature3].shift(i)
+        testX[new_feature] = testX[feature3].shift(i)
     if feature4 != "":
         new_feature = (feature4, i)
         df_feature[new_feature] = df_feature[feature4].shift(i)
+        testX[new_feature] = testX[feature4].shift(i)
     if feature5 != "":
         new_feature = (feature5, i)
         df_feature[new_feature] = df_feature[feature5].shift(i)
+        testX[new_feature] = testX[feature5].shift(i)
     if feature6 != "":
         new_feature = (feature6, i)
         df_feature[new_feature] = df_feature[feature6].shift(i)
+        testX[new_feature] = testX[feature6].shift(i)
 
 df_feature = df_feature[numPoints:]
 df_label = df_label[numPoints:]
+testX = testX[numPoints:]
+testY = testY[numPoints:]
+
+# print(df_feature)
+# print(testX)
+
 df_feature.index = range(len(df_feature))
 df_label.index = range(len(df_label))
 
-Y = df_label[:3000].as_matrix()
-X = df_feature[:3000].as_matrix()
+
+
+Y = df_label.as_matrix()
+X = df_feature.as_matrix()
 
 
 # Prepare for cross-validation
@@ -120,14 +143,12 @@ print('\tIQR F1 score:', stats.iqr(f1_scores))
 print('\tSkewness F1 score:', stats.skew(f1_scores))
 print('\tZero F1 score:', f1_scores.count(0.00))
 
-
-predictions = clf.predict(df_feature[3000:])
+predictions = clf.predict(testX)
 ser = pd.Series(predictions)
 ser.name = "predictions"
 print(ser.value_counts())
 print('\n-----------------------------------')
-labels = df_label[3000:]
-labels.index = range(len(labels))
-print(labels.value_counts())
-output = pd.concat([labels, ser], axis=1)
+testY.index = range(len(testY))
+print(testY.value_counts())
+output = pd.concat([testY, ser], axis=1)
 output.to_csv(path_or_buf='output.csv')
