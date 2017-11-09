@@ -30,26 +30,22 @@ Data Cleaning & Exploratory Analysis are iterative, starting at next page.
 ## Epoch 1: Display of Vertical Acceleration with Natural Gravity
 
 **Date**: the time stamp of a data point \newline 
+**Latitude**: \newline 
+**Longitude**: \newline 
 **Speed**: traveling speed of the vehicle \newline 
+**speedbump**: whether this data point is a speedbump \newline
 **forw_accel**: forward acceleration (front and back) of the vehicle \newline 
 **hori_accel**: horizontal acceleration (left and right) of the vehicle \newline 
 **vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline
 
 ```{r data cleaning 1, echo=TRUE}
-LA10.valid = LA10.raw[, c("Date", "Latitude", "Longitude", "Speed")]
+LA10.valid = LA10.raw[, c("Date", "Latitude", "Longitude", "Speed", "speedbump")]
 # validate DateTime format
 LA10.valid$Date <- as.POSIXct(LA10.valid$Date, format="%Y-%m-%d %H:%M:%OS")
 # specify orientation of accelration
 LA10.valid$forw_accel = LA10.raw$X
 LA10.valid$hori_accel = LA10.raw$Y
 LA10.valid$vert_accel_G = LA10.raw$Z
-# mark speed bumps
-for (i in 1:nrow(LA10.valid)) {
-    LA10.valid$speedbump[i] = "no"
-}
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.valid$speedbump[i] = "yes"
-}
 ```
 
 ```{r exploratory data analysis 1, echo=FALSE}
@@ -61,9 +57,11 @@ LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + xlab("Time")
 LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + ylab("Vertical Acceleration (G-Force)") 
 LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + ggtitle("Time-Indexed Vertical Acceleration with Natural Gravity")
 LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = -1, ymin = -1, ymax = -1, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.vert_accel_G.plot <- LA10.vert_accel_G.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = -1, ymin = -1, ymax = -1, colour = "red", size = 0.25)
+    }
 }
 print(LA10.vert_accel_G.plot)
 ```
@@ -92,9 +90,11 @@ LA10.vert_accel.plot <- LA10.vert_accel.plot + xlab("Time")
 LA10.vert_accel.plot <- LA10.vert_accel.plot + ylab("Vertical Acceleration (G-Force)") 
 LA10.vert_accel.plot <- LA10.vert_accel.plot + ggtitle("Time-Indexed Vertical Acceleration without Natural Gravity")
 LA10.vert_accel.plot <- LA10.vert_accel.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.vert_accel.plot <- LA10.vert_accel.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.vert_accel.plot <- LA10.vert_accel.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.vert_accel.plot)
 ```
@@ -130,9 +130,11 @@ LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + xlab("Tim
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + ylab("Ratio of Vert. Accel. and Speed") 
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Acceleration and Speed")
 LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.vert_accel_ratio_speed.plot <- LA10.vert_accel_ratio_speed.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.vert_accel_ratio_speed.plot)
 ```
@@ -168,9 +170,11 @@ LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + xla
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + ylab("Ratio of Sq. Vert. Accel. and Speed") 
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Acceleration and Speed")
 LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.sq_vert_accel_ratio_speed.plot <- LA10.sq_vert_accel_ratio_speed.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.sq_vert_accel_ratio_speed.plot)
 ```
@@ -206,9 +210,11 @@ LA10.vert_jolt.plot <- LA10.vert_jolt.plot + xlab("Time")
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + ylab("Vertical Jolt (G-Force)") 
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + ggtitle("Time-Indexed Vertical Jolt (Incremental)")
 LA10.vert_jolt.plot <- LA10.vert_jolt.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.vert_jolt.plot <- LA10.vert_jolt.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.vert_jolt.plot <- LA10.vert_jolt.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.vert_jolt.plot)
 ```
@@ -244,9 +250,11 @@ LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + xlab("Time"
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + ylab("Ratio of Vert. Jolt and Speed") 
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Jolt and Speed")
 LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.vert_jolt_ratio_speed.plot <- LA10.vert_jolt_ratio_speed.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.vert_jolt_ratio_speed.plot)
 ```
@@ -282,9 +290,11 @@ LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + xlab(
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + ylab("Ratio of Sq. Vert. Jolt and Speed") 
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Jolt and Speed")
 LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.sq_vert_jolt_ratio_speed.plot <- LA10.sq_vert_jolt_ratio_speed.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.sq_vert_jolt_ratio_speed.plot)
 ```
@@ -367,9 +377,11 @@ LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + theme(legend.position = c(0.3, 
 LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + xlab("Time") 
 LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + ylab("5-Sliding-Window Stats. of Vertical Jolt") 
 LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + ggtitle("5-Sliding-Window Statistics of Vertical Jolt")
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.vert_jolt_5.plot <- LA10.vert_jolt_5.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.25)
+    }
 }
 print(LA10.vert_jolt_5.plot)
 ```
@@ -394,9 +406,11 @@ LA10.comparative.plot <- LA10.comparative.plot + xlab("Time")
 LA10.comparative.plot <- LA10.comparative.plot + ylab("Ratios") 
 LA10.comparative.plot <- LA10.comparative.plot + ggtitle("Comparison of Two Most Promising Factors")
 LA10.comparative.plot <- LA10.comparative.plot + theme(legend.position = c(0.35, 0.2))
-for (i in c(88, 90, 91, 108, 109, 110, 1287, 1296, 1338, 1345, 1989, 1990, 1991)) {
-    LA10.comparative.plot <- LA10.comparative.plot + 
-        annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.2)
+for (i in 1:nrow(LA10.valid)) {
+    if (LA10.valid$speedbump[i] == "yes") {
+        LA10.comparative.plot <- LA10.comparative.plot + 
+            annotate("pointrange", x = LA10.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.2)
+    }
 }
 print(LA10.comparative.plot)
 ```
@@ -409,11 +423,13 @@ Note: Speed bumps are labeled as $\color{red}red$ points on the graph. \newline
 # Data Writing
 
 **Date**: the time stamp of a data point \newline 
+**Latitude**: \newline 
+**Longitude**: \newline 
 **Speed**: traveling speed of the vehicle \newline 
+**speedbump**: whether this data point is a speedbump \newline 
 **forw_accel**: forward acceleration (front and back) of the vehicle \newline 
 **hori_accel**: horizontal acceleration (left and right) of the vehicle \newline 
 **vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline 
-**speedbump**: whether this data point is a speedbump \newline 
 **vert_accel**: vertical acceleration (up and down) of the vehicle without natural gravity \newline 
 **vert_accel_ratio_speed**: the ratio between vertical acceleration (without natural gravity) and traveling speed \newline 
 **sq_vert_accel_ratio_speed**: the ratio between squared vertical acceleration (without natual gravity) and traveling speed \newline 
