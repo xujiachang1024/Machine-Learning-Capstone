@@ -16,19 +16,34 @@ warnings.filterwarnings('ignore', category=UndefinedMetricWarning)
 
 
 # Data import and cleaning
-df = pd.read_csv("./kenya_oct_15_data_labeled.csv")  # read data from the .csv file
-
+df1 = pd.read_csv("./speedbumps_1.csv")  # read data from the .csv file
+df2 = pd.read_csv("./speedbumps_2.csv")  # read data from the .csv file
+df3 = pd.read_csv("./speedbumps_3.csv")  # read data from the .csv file
+df4 = pd.read_csv("./speedbumps_4.csv")  # read data from the .csv file
+df = pd.read_csv("./speedbumps_5.csv")  # read data from the .csv file
+df1 = df1.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df2 = df2.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df3 = df3.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df4 = df4.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df = df.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]  # only select relevant columns
+df = df.append(df1)
+df = df.append(df2)
+df = df.append(df3)
+df = df.append(df4)
+keywords = ['yes', 'no']
+mapping = [1, 0]
+df = df.replace(keywords, mapping)
 
 # Decision Tree Model 1
 # Separate Y and X variables
 df_label = df.loc[:, 'speedbump']
-df_feature = df.loc[:, ('x', 'z')]
+df_feature = df.loc[:, ('speedbump', 'Speed', 'X', 'Y', 'Z', 'z_jolt')]
 
-numPoints = 4;
-feature1 = "x"
-feature2 = "z"
-feature3 = ""
-feature4 = ""
+numPoints = 3;
+feature1 = "X"
+feature2 = "Y"
+feature3 = "Z"
+feature4 = "Speed"
 feature5 = ""
 feature6 = ""
 
@@ -57,12 +72,12 @@ df_label = df_label[numPoints:]
 df_feature.index = range(len(df_feature))
 df_label.index = range(len(df_label))
 
-Y = df_label.as_matrix()
-X = df_feature.as_matrix()
+Y = df_label[:3000].as_matrix()
+X = df_feature[:3000].as_matrix()
 
 
 # Prepare for cross-validation
-clf = DecisionTreeClassifier(criterion='gini', splitter='best', max_features=None, max_depth=10, min_samples_leaf= 3,min_samples_split=2, random_state=0, presort=True)
+clf = DecisionTreeClassifier(criterion='gini', splitter='best', max_features=None, max_depth=40, min_samples_leaf= 10,min_samples_split=2, random_state=0, presort=True)
 f1_scores = []  # sum of F1 scores
 cv = 100  # number of cross-validations
 
@@ -106,11 +121,13 @@ print('\tSkewness F1 score:', stats.skew(f1_scores))
 print('\tZero F1 score:', f1_scores.count(0.00))
 
 
-predictions = clf.predict(df_feature)
+predictions = clf.predict(df_feature[3000:])
 ser = pd.Series(predictions)
 ser.name = "predictions"
 print(ser.value_counts())
 print('\n-----------------------------------')
-print(df_label.value_counts())
-output = pd.concat([df_label, ser], axis=1)
+labels = df_label[3000:]
+labels.index = range(len(labels))
+print(labels.value_counts())
+output = pd.concat([labels, ser], axis=1)
 output.to_csv(path_or_buf='output.csv')
