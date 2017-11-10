@@ -399,7 +399,7 @@ Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
 
 ```{r exploratory data analysis 9, echo=FALSE}
 require(ggplot2)
-LA14.comparative.plot <- ggplot(LA14.valid[150:190, ], aes(x = Date))
+LA14.comparative.plot <- ggplot(LA14.valid, aes(x = Date))
 LA14.comparative.plot <- LA14.comparative.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
 #LA14.comparative.plot <- LA14.comparative.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
 #LA14.comparative.plot <- LA14.comparative.plot + geom_line(aes(y = vert_jolt, colour = "Vertical Jolt"))
