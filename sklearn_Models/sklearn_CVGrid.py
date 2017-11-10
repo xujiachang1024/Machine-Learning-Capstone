@@ -46,7 +46,7 @@ MODEL = 0
 
 # Separate Y and X variables
 df_label = df.loc[:, 'speedbump']
-df_feature = df.loc[:, ('Speed', 'vert_accel', 'vert_jolt', 'vert_accel_ratio_speed', 'sq_vert_accel_ratio_speed', 'vert_jolt_ratio_speed', 'sq_vert_jolt_ratio_speed')]
+df_feature = df.loc[:, ('Speed', 'vert_accel', 'vert_jolt', 'sq_vert_accel_ratio_speed', 'sq_vert_jolt_ratio_speed', 'vert_jolt_range')]
 Y = df_label.as_matrix()
 X = df_feature.as_matrix()
 
