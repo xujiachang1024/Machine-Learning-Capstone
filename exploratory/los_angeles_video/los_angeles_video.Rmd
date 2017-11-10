@@ -1,0 +1,489 @@
+---
+title: 'Exploratory Data Analysis on los_angeles_video.csv'
+author: "USC Machine Learning Team"
+date: "11/2/2017"
+output: pdf_document
+header-includes:
+  - \usepackage{color}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data Loading
+
+```{r data loading, echo=TRUE}
+# load data file
+if (!exists("LAV.raw")) {
+    LAV.raw <- read.csv("./los_angeles_video.csv")
+}
+print(nrow(LAV.raw))
+```
+
+# Data Cleaning & Exploratory Analysis
+
+Data Cleaning & Exploratory Analysis are iterative, starting at next page.
+
+\pagebreak 
+
+## Epoch 1: Display of Vertical Acceleration with Natural Gravity
+
+**Date**: the time stamp of a data point \newline 
+**Speed**: traveling speed of the vehicle \newline 
+**forw_accel**: forward acceleration (front and back) of the vehicle \newline 
+**hori_accel**: horizontal acceleration (left and right) of the vehicle \newline 
+**vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline 
+**speedbump**: whether this data point is a speedbump \newline 
+
+```{r data cleaning 1, echo=TRUE}
+LAV.valid = LAV.raw[, c("Date", "Latitude", "Longitude", "Speed")]
+# validate DateTime format
+LAV.valid$Date <- as.POSIXct(LAV.valid$Date, format="%Y-%m-%d %H:%M:%OS")
+# specify orientation of accelration
+LAV.valid$forw_accel = LAV.raw$X
+LAV.valid$hori_accel = LAV.raw$Y
+LAV.valid$vert_accel_G = LAV.raw$Z
+# mark speed bumps
+for (i in 1:nrow(LAV.valid)) {
+    LAV.valid$speedbump[i] = "no"
+}
+for (i in c(28, 29, 444, 447, 777, 900, 1018, 1019, 1020, 1022, 1203, 1345, 1723, 1724, 1730, 1868, 2058, 2059, 2209, 2436, 2437, 2439, 2590, 2838, 2962, 3171, 3180, 3227, 3228, 3266, 3391, 3564, 3603, 3925, 4007)) {
+    LAV.valid$speedbump[i] = "yes"
+}
+LAV.valid <- LAV.valid[300:3500, ]
+```
+
+```{r exploratory data analysis 1, echo=FALSE}
+require(ggplot2)
+LAV.vert_accel_G.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + geom_line(aes(y = vert_accel_G, colour = "Vert. Accel. with -1G"))
+LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + scale_colour_manual(values = c("darkorchid4"))
+LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + xlab("Time") 
+LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + ylab("Vertical Acceleration (G-Force)") 
+LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + ggtitle("Time-Indexed Vertical Acceleration with Natural Gravity")
+LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = -1, ymin = -1, ymax = -1, colour = "red", size = 0.4)
+    }
+}
+print(LAV.vert_accel_G.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak
+
+## Epoch 2: Display of Vertical Acceleration without Natural Gravity
+
+**vert_accel**: vertical acceleration (up and down) of the vehicle without natural gravity \newline
+
+```{r data cleaning 2, echo=TRUE}
+# remove natural gravity in vertical acceleration
+LAV.valid$vert_accel = LAV.valid$vert_accel_G + 1
+```
+
+```{r exploratory data analysis 2, echo=FALSE}
+require(ggplot2)
+LAV.vert_accel.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.vert_accel.plot <- LAV.vert_accel.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
+LAV.vert_accel.plot <- LAV.vert_accel.plot + geom_line(aes(y = Speed / 10, colour = "Traveling Speed"))
+LAV.vert_accel.plot <- LAV.vert_accel.plot + scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Traveling Speed (m/s)"))
+LAV.vert_accel.plot <- LAV.vert_accel.plot + scale_colour_manual(values = c("deepskyblue", "darkorchid4"))
+LAV.vert_accel.plot <- LAV.vert_accel.plot + xlab("Time") 
+LAV.vert_accel.plot <- LAV.vert_accel.plot + ylab("Vertical Acceleration (G-Force)") 
+LAV.vert_accel.plot <- LAV.vert_accel.plot + ggtitle("Time-Indexed Vertical Acceleration without Natural Gravity")
+LAV.vert_accel.plot <- LAV.vert_accel.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.vert_accel.plot <- LAV.vert_accel.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.vert_accel.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak
+
+## Epoch 3: Display of Ratio between Vertical Acceleration (w/o Natural G) and Speed
+
+**vert_accel_ratio_speed**: the ratio between vertical acceleration (without natural gravity) and traveling speed \newline
+
+```{r data cleaning 3, echo=TRUE}
+# calculate ratio between vertical acceleration and speed
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$Speed[i] == 0) {
+        LAV.valid$vert_accel_ratio_speed[i] = 0
+    }
+    else {
+        LAV.valid$vert_accel_ratio_speed[i] = LAV.valid$vert_accel[i] / LAV.valid$Speed[i]
+    }
+}
+```
+
+```{r exploratory data analysis 3, echo=FALSE}
+require(ggplot2)
+LAV.vert_accel_ratio_speed.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + geom_line(aes(y = vert_accel_ratio_speed, colour = "Ratio of Vert. Accel. and Speed"))
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + geom_line(aes(y = Speed / 100, colour = "Traveling Speed"))
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*100, name = "Traveling Speed (m/s)"))
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + xlab("Time") 
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + ylab("Ratio of Vert. Accel. and Speed") 
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Acceleration and Speed")
+LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.vert_accel_ratio_speed.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph. \newline
+
+\pagebreak
+
+## Epoch 4: Display of Ratio between Vertical Acceleration (w/o Natural G) and Speed
+
+**sq_vert_accel_ratio_speed**: the ratio between squared vertical acceleration (without natual gravity) and traveling speed \newline
+
+```{r data cleaning 4, echo=TRUE}
+# calculate ratio between vertical acceleration and speed
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$Speed[i] == 0) {
+        LAV.valid$sq_vert_accel_ratio_speed[i] = 0
+    }
+    else {
+        LAV.valid$sq_vert_accel_ratio_speed[i] = (LAV.valid$vert_accel[i] * LAV.valid$vert_accel[i]) / LAV.valid$Speed[i]
+    }
+}
+```
+
+```{r exploratory data analysis 4, echo=FALSE}
+require(ggplot2)
+LAV.sq_vert_accel_ratio_speed.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + geom_line(aes(y = sq_vert_accel_ratio_speed, colour = "Ratio of Sq. Vert. Accel. and Speed"))
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*50, name = "Traveling Speed (m/s)"))
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + xlab("Time") 
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + ylab("Ratio of Sq. Vert. Accel. and Speed") 
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Acceleration and Speed")
+LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.sq_vert_accel_ratio_speed.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak
+
+## Epoch 5: Display of Vertical Jolt (Incremental Change of Vert. Accel.)
+
+**vert_jolt**: vertical jolt of the vehicle (incremental change of vertical acceleration) \newline
+
+```{r data cleaning 5, echo=TRUE}
+# calculate vertical jolt
+for (i in 1:nrow(LAV.valid)) {
+    if (i == 1) {
+        LAV.valid$vert_jolt[i] = 0
+    }
+    else {
+        LAV.valid$vert_jolt[i] = LAV.valid$vert_accel[i] - LAV.valid$vert_accel[i - 1]
+    }
+}
+```
+
+```{r exploratory data analysis 5, echo=FALSE}
+require(ggplot2)
+LAV.vert_jolt.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + geom_line(aes(y = vert_jolt, colour = "Vertical Jolt"))
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + geom_line(aes(y = Speed / 10, colour = "Traveling Speed"))
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Traveling Speed (m/s)"))
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + scale_colour_manual(values = c("deepskyblue", "darkorchid4"))
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + xlab("Time") 
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + ylab("Vertical Jolt (G-Force)") 
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + ggtitle("Time-Indexed Vertical Jolt (Incremental)")
+LAV.vert_jolt.plot <- LAV.vert_jolt.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.vert_jolt.plot <- LAV.vert_jolt.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.vert_jolt.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak
+
+## Epoch 6: Display of Ratio between Vertical Jolt and Speed
+
+**vert_jolt_ratio_speed**: the ratio between vertical jolt and traveling speed \newline
+
+```{r data cleaning 6, echo=TRUE}
+# calculate ratio between vertical jolt and speed
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$Speed[i] == 0) {
+        LAV.valid$vert_jolt_ratio_speed[i] = 0
+    }
+    else {
+        LAV.valid$vert_jolt_ratio_speed[i] = LAV.valid$vert_jolt[i] / LAV.valid$Speed[i]
+    }
+}
+```
+
+```{r exploratory data analysis 6, echo=FALSE}
+require(ggplot2)
+LAV.vert_jolt_ratio_speed.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + geom_line(aes(y = vert_jolt_ratio_speed, colour = "Ratio of Vert. Jolt and Speed"))
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + geom_line(aes(y = Speed / 100, colour = "Traveling Speed"))
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*100, name = "Traveling Speed (m/s)"))
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + xlab("Time") 
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + ylab("Ratio of Vert. Jolt and Speed") 
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Jolt and Speed")
+LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.vert_jolt_ratio_speed.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak
+
+## Epoch 7: Display of Ratio between Squared Vertical Jolt and Speed
+
+**sq_vert_jolt_ratio_speed**: the ratio between squared vertical jolt and traveling speed \newline
+
+```{r data cleaning 7, echo=TRUE}
+# calculate ratio between vertical jolt and speed
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$Speed[i] == 0) {
+        LAV.valid$sq_vert_jolt_ratio_speed[i] = 0
+    }
+    else {
+        LAV.valid$sq_vert_jolt_ratio_speed[i] = (LAV.valid$vert_jolt[i] * LAV.valid$vert_jolt[i]) / LAV.valid$Speed[i]
+    }
+}
+```
+
+```{r exploratory data analysis 7, echo=FALSE}
+require(ggplot2)
+LAV.sq_vert_jolt_ratio_speed.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + geom_line(aes(y = sq_vert_jolt_ratio_speed, colour = "Ratio of Sq. Vert. Jolt and Speed"))
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + scale_y_continuous(sec.axis = sec_axis(~.*50, name = "Traveling Speed (m/s)"))
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + scale_colour_manual(values = c("darkorchid4", "deepskyblue"))
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + xlab("Time") 
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + ylab("Ratio of Sq. Vert. Jolt and Speed") 
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Jolt and Speed")
+LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.sq_vert_jolt_ratio_speed.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak
+
+## Epoch 8: Display of Sliding-Window Statistics of Vertical Jolt
+
+**vert_jolt_mean**: 5-sliding-window mean of vertical jolt \newline 
+**vert_jolt_sd**: 5-sliding-window standard deviation of vertical jolt \newline 
+**vert_jolt_min**: 5-sliding-window minimum of vertical jolt \newline 
+**vert_jolt_max**: 5-sliding-window maximum of vertical jolt \newline 
+**vert_jolt_range**: 5-sliding-window range of vertical jolt \newline 
+
+```{r data cleaning 8, echo=TRUE}
+# calculate 5-sliding-window mean of vertical jolt
+for (i in 3:nrow(LAV.valid)-2) {
+    LAV.valid$vert_jolt_mean[i] = mean(c(LAV.valid$vert_jolt[i-2], 
+                                        LAV.valid$vert_jolt[i-1], 
+                                        LAV.valid$vert_jolt[i], 
+                                        LAV.valid$vert_jolt[i+1], 
+                                        LAV.valid$vert_jolt[i+2]))
+}
+LAV.valid$vert_jolt_mean[1] = 0
+LAV.valid$vert_jolt_mean[2] = 0
+LAV.valid$vert_jolt_mean[nrow(LAV.valid) - 1] = 0
+LAV.valid$vert_jolt_mean[nrow(LAV.valid)] = 0
+# calculate 5-sliding-window standard deviation of vertical jolt
+for (i in 3:nrow(LAV.valid)-2) {
+    LAV.valid$vert_jolt_sd[i] = sd(c(LAV.valid$vert_jolt[i-2], 
+                                        LAV.valid$vert_jolt[i-1], 
+                                        LAV.valid$vert_jolt[i], 
+                                        LAV.valid$vert_jolt[i+1], 
+                                        LAV.valid$vert_jolt[i+2]))
+}
+LAV.valid$vert_jolt_sd[1] = 0
+LAV.valid$vert_jolt_sd[2] = 0
+LAV.valid$vert_jolt_sd[nrow(LAV.valid) - 1] = 0
+LAV.valid$vert_jolt_sd[nrow(LAV.valid)] = 0
+# calculate 5-sliding-window minimum of vertical jolt
+for (i in 3:nrow(LAV.valid)-2) {
+    LAV.valid$vert_jolt_min[i] = min(c(LAV.valid$vert_jolt[i-2], 
+                                        LAV.valid$vert_jolt[i-1], 
+                                        LAV.valid$vert_jolt[i], 
+                                        LAV.valid$vert_jolt[i+1], 
+                                        LAV.valid$vert_jolt[i+2]))
+}
+LAV.valid$vert_jolt_min[1] = 0
+LAV.valid$vert_jolt_min[2] = 0
+LAV.valid$vert_jolt_min[nrow(LAV.valid) - 1] = 0
+LAV.valid$vert_jolt_min[nrow(LAV.valid)] = 0
+# calculate 5-sliding-window maxium of vertical jolt
+for (i in 3:nrow(LAV.valid)-2) {
+    LAV.valid$vert_jolt_max[i] = max(c(LAV.valid$vert_jolt[i-2], 
+                                        LAV.valid$vert_jolt[i-1], 
+                                        LAV.valid$vert_jolt[i], 
+                                        LAV.valid$vert_jolt[i+1], 
+                                        LAV.valid$vert_jolt[i+2]))
+}
+LAV.valid$vert_jolt_max[1] = 0
+LAV.valid$vert_jolt_max[2] = 0
+LAV.valid$vert_jolt_max[nrow(LAV.valid) - 1] = 0
+LAV.valid$vert_jolt_max[nrow(LAV.valid)] = 0
+# calculate 5-sliding-window range of vertical jolt
+LAV.valid$vert_jolt_range = LAV.valid$vert_jolt_max - LAV.valid$vert_jolt_min
+```
+
+```{r exploratory data analysis 8, echo=FALSE}
+require(ggplot2)
+LAV.vert_jolt_5.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_range, colour = "Range (sky blue)"))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_mean, colour = "Mean (dark blue)"))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_sd, colour = "Standard Deviation (orange)"))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_min, colour = "Minimum (green)"))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_max, colour = "Maximum (purple)"))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + scale_colour_manual(values = c("darkorchid4", "blue4", "chartreuse4", "deepskyblue", "goldenrod3"))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + theme(legend.position = c(0.3, 0.8))
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + xlab("Time") 
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + ylab("5-Sliding-Window Stats. of Vertical Jolt") 
+LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + ggtitle("5-Sliding-Window Statistics of Vertical Jolt")
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.vert_jolt_5.plot)
+```
+
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph.
+
+\pagebreak 
+
+## Epoch 9: Comparative Display of Two Most Promising Factors
+
+```{r exploratory data analysis 9, echo=FALSE}
+require(ggplot2)
+LAV.comparative.plot <- ggplot(LAV.valid, aes(x = Date))
+LAV.comparative.plot <- LAV.comparative.plot + geom_line(aes(y = Speed / 50, colour = "Traveling Speed"))
+#LAV.comparative.plot <- LAV.comparative.plot + geom_line(aes(y = vert_accel, colour = "Vertical Acceleration"))
+#LAV.comparative.plot <- LAV.comparative.plot + geom_line(aes(y = vert_jolt, colour = "Vertical Jolt"))
+LAV.comparative.plot <- LAV.comparative.plot + geom_line(aes(y = sq_vert_accel_ratio_speed, colour = "Ratio of Sq. Vert. Accel. & Speed"))
+LAV.comparative.plot <- LAV.comparative.plot + geom_line(aes(y = -sq_vert_jolt_ratio_speed, colour = "Ratio of Sq. Vert. Jolt & Speed (-)"))
+LAV.comparative.plot <- LAV.comparative.plot + scale_y_continuous(sec.axis = sec_axis(~.*50, name = "Traveling Speed (m/s)"))
+LAV.comparative.plot <- LAV.comparative.plot + scale_colour_manual(values = c("darkorchid4", "goldenrod3", "deepskyblue"))
+LAV.comparative.plot <- LAV.comparative.plot + xlab("Time") 
+LAV.comparative.plot <- LAV.comparative.plot + ylab("Ratios") 
+LAV.comparative.plot <- LAV.comparative.plot + ggtitle("Comparison of Two Most Promising Factors")
+LAV.comparative.plot <- LAV.comparative.plot + theme(legend.position = c(0.35, 0.2))
+for (i in 1:nrow(LAV.valid)) {
+    if (LAV.valid$speedbump[i] == "yes") {
+        LAV.comparative.plot <- LAV.comparative.plot + 
+            annotate("pointrange", x = LAV.valid$Date[i], y = 0, ymin = 0, ymax = 0, colour = "red", size = 0.4)
+    }
+}
+print(LAV.comparative.plot)
+```
+
+Note: Ratio of Sq. Vert. Jolt & Speed is negatively filpped for visualization purpose. \newline 
+Note: Speed bumps are labeled as $\color{red}red$ points on the graph. \newline
+
+\pagebreak 
+
+# Data Writing
+
+**Date**: the time stamp of a data point \newline 
+**Latitude**: \newline 
+**Longitude**: \newline 
+**Speed**: traveling speed of the vehicle \newline 
+**speedbump**: whether this data point is a speedbump \newline 
+**forw_accel**: forward acceleration (front and back) of the vehicle \newline 
+**hori_accel**: horizontal acceleration (left and right) of the vehicle \newline 
+**vert_accel_G**: vertical acceleration (up and down) of the vehicle with natural gravity (-1G) \newline 
+**vert_accel**: vertical acceleration (up and down) of the vehicle without natural gravity \newline 
+**vert_accel_ratio_speed**: the ratio between vertical acceleration (without natural gravity) and traveling speed \newline 
+**sq_vert_accel_ratio_speed**: the ratio between squared vertical acceleration (without natual gravity) and traveling speed \newline 
+**vert_jolt**: vertical jolt of the vehicle (incremental change of vertical acceleration) \newline 
+**vert_jolt_ratio_speed**: the ratio between vertical jolt and traveling speed \newline 
+**sq_vert_jolt_ratio_speed**: the ratio between squared vertical jolt and traveling speed \newline 
+**vert_jolt_mean**: 5-sliding-window mean of vertical jolt \newline 
+**vert_jolt_sd**: 5-sliding-window standard deviation of vertical jolt \newline 
+**vert_jolt_min**: 5-sliding-window minimum of vertical jolt \newline 
+**vert_jolt_max**: 5-sliding-window maximum of vertical jolt \newline 
+**vert_jolt_range**: 5-sliding-window range of vertical jolt \newline 
+
+```{r data writing, echo=TRUE}
+jpeg("./Epoch1_LAV.vert_accel_G.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.vert_accel_G.plot)
+dev.off()
+
+jpeg("./Epoch2_LAV.vert_accel.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.vert_accel.plot)
+dev.off()
+
+jpeg("./Epoch3_LAV.vert_accel_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.vert_accel_ratio_speed.plot)
+dev.off()
+
+jpeg("./Epoch4_LAV.sq_vert_accel_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.sq_vert_accel_ratio_speed.plot)
+dev.off()
+
+jpeg("./Epoch5_LAV.vert_jolt.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.vert_jolt.plot)
+dev.off()
+
+jpeg("./Epoch6_LAV.vert_jolt_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.vert_jolt_ratio_speed.plot)
+dev.off()
+
+jpeg("./Epoch7_LAV.sq_vert_jolt_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.sq_vert_jolt_ratio_speed.plot)
+dev.off()
+
+jpeg("./Epoch8_LAV.vert_jolt_5.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.vert_jolt_5.plot)
+dev.off()
+
+jpeg("./Epoch9_LAV.comparative.plot.jpeg", width = 1200, height = 750, units = "px")
+print(LAV.comparative.plot)
+dev.off()
+
+write.csv(LAV.valid, "./los_angeles_video_labeled.csv")
+```

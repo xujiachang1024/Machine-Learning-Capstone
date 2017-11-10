@@ -19,7 +19,7 @@ find_speedbump <- function(fileName, output) {
     # find speedbumps
     df$speedbump <- NA
     for (i in 1:nrow(df)) {
-        if (df$z_jolt[i] <= z_jolt.mean - 5 * z_jolt.sdev | df$z_jolt[i] >= z_jolt.mean + 5 * z_jolt.sdev) {
+        if (df$z_jolt[i] <= z_jolt.mean - 4 * z_jolt.sdev | df$z_jolt[i] >= z_jolt.mean + 4 * z_jolt.sdev) {
             df$speedbump[i] <- "yes"
         }
         else {
@@ -36,3 +36,5 @@ find_speedbump <- function(fileName, output) {
     # write to a new "speedbumps.csv" file
     write.csv(df, file = output)
 }
+
+find_speedbump("./los_angeles_video.csv", "./speedbump_video.csv")
