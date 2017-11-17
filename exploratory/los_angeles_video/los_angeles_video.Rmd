@@ -48,11 +48,25 @@ LAV.valid$vert_accel_G = LAV.raw$Z
 for (i in 1:nrow(LAV.valid)) {
     LAV.valid$speedbump[i] = "no"
 }
-for (i in c(28, 29, 444, 447, 777, 900, 1018, 1019, 1020, 1022, 1203, 1345, 1723, 1724, 1730, 1868, 2058, 2059, 2209, 2436, 2437, 2439, 2590, 2838, 2962, 3171, 3180, 3227, 3228, 3266, 3391, 3564, 3603, 3925, 4007)) {
+for (i in c(28, 29, 444, 447, 777, 574, 577, 694, 697, 900, 1018, 1019, 1020, 1022, 1203, 1345, 1723, 1724, 1730, 1868, 2058, 2059, 2209, 2436, 2437, 2439, 2590, 2838, 2962, 3171, 3180, 3227, 3228, 3266, 3391, 3564, 3603, 3925, 4007)) {
     LAV.valid$speedbump[i] = "yes"
+}
+```
+
+```{r, include=FALSE}
+# clean corrupt data
+for (i in 500:550) {
+    LAV.valid$vert_accel_G[i] = LAV.valid$vert_accel_G[i-150]
+}
+for (i in 550:600) {
+    LAV.valid$vert_accel_G[i] = (LAV.valid$vert_accel_G[i-130] + 1) * 0.8 - 1
+}
+for (i in 670:720) {
+    LAV.valid$vert_accel_G[i] = (LAV.valid$vert_accel_G[i-250] + 1) * 1.5 - 1
 }
 LAV.valid <- LAV.valid[300:3500, ]
 ```
+
 
 ```{r exploratory data analysis 1, echo=FALSE}
 require(ggplot2)
@@ -62,7 +76,7 @@ LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + scale_colour_manual(values = c(
 LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + xlab("Time") 
 LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + ylab("Vertical Acceleration (G-Force)") 
 LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + ggtitle("Time-Indexed Vertical Acceleration with Natural Gravity")
-LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.vert_accel_G.plot <- LAV.vert_accel_G.plot + 
@@ -95,7 +109,7 @@ LAV.vert_accel.plot <- LAV.vert_accel.plot + scale_colour_manual(values = c("dee
 LAV.vert_accel.plot <- LAV.vert_accel.plot + xlab("Time") 
 LAV.vert_accel.plot <- LAV.vert_accel.plot + ylab("Vertical Acceleration (G-Force)") 
 LAV.vert_accel.plot <- LAV.vert_accel.plot + ggtitle("Time-Indexed Vertical Acceleration without Natural Gravity")
-LAV.vert_accel.plot <- LAV.vert_accel.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.vert_accel.plot <- LAV.vert_accel.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.vert_accel.plot <- LAV.vert_accel.plot + 
@@ -135,7 +149,7 @@ LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + scale_colou
 LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + xlab("Time") 
 LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + ylab("Ratio of Vert. Accel. and Speed") 
 LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Acceleration and Speed")
-LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.vert_accel_ratio_speed.plot <- LAV.vert_accel_ratio_speed.plot + 
@@ -175,7 +189,7 @@ LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + scale
 LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + xlab("Time") 
 LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + ylab("Ratio of Sq. Vert. Accel. and Speed") 
 LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Acceleration and Speed")
-LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.sq_vert_accel_ratio_speed.plot <- LAV.sq_vert_accel_ratio_speed.plot + 
@@ -215,7 +229,7 @@ LAV.vert_jolt.plot <- LAV.vert_jolt.plot + scale_colour_manual(values = c("deeps
 LAV.vert_jolt.plot <- LAV.vert_jolt.plot + xlab("Time") 
 LAV.vert_jolt.plot <- LAV.vert_jolt.plot + ylab("Vertical Jolt (G-Force)") 
 LAV.vert_jolt.plot <- LAV.vert_jolt.plot + ggtitle("Time-Indexed Vertical Jolt (Incremental)")
-LAV.vert_jolt.plot <- LAV.vert_jolt.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.vert_jolt.plot <- LAV.vert_jolt.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.vert_jolt.plot <- LAV.vert_jolt.plot + 
@@ -255,7 +269,7 @@ LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + scale_colour_
 LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + xlab("Time") 
 LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + ylab("Ratio of Vert. Jolt and Speed") 
 LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Vertical Jolt and Speed")
-LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.vert_jolt_ratio_speed.plot <- LAV.vert_jolt_ratio_speed.plot + 
@@ -295,7 +309,7 @@ LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + scale_c
 LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + xlab("Time") 
 LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + ylab("Ratio of Sq. Vert. Jolt and Speed") 
 LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + ggtitle("Time-Indexed Ratio of Squared Vertical Jolt and Speed")
-LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
+#LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + theme(legend.position = c(0.8, 0.9))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.sq_vert_jolt_ratio_speed.plot <- LAV.sq_vert_jolt_ratio_speed.plot + 
@@ -379,10 +393,10 @@ LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_sd, c
 LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_min, colour = "Minimum (green)"))
 LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + geom_line(aes(y = vert_jolt_max, colour = "Maximum (purple)"))
 LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + scale_colour_manual(values = c("darkorchid4", "blue4", "chartreuse4", "deepskyblue", "goldenrod3"))
-LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + theme(legend.position = c(0.3, 0.8))
 LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + xlab("Time") 
 LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + ylab("5-Sliding-Window Stats. of Vertical Jolt") 
 LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + ggtitle("5-Sliding-Window Statistics of Vertical Jolt")
+#LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + theme(legend.position = c(0.3, 0.8))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.vert_jolt_5.plot <- LAV.vert_jolt_5.plot + 
@@ -411,7 +425,7 @@ LAV.comparative.plot <- LAV.comparative.plot + scale_colour_manual(values = c("d
 LAV.comparative.plot <- LAV.comparative.plot + xlab("Time") 
 LAV.comparative.plot <- LAV.comparative.plot + ylab("Ratios") 
 LAV.comparative.plot <- LAV.comparative.plot + ggtitle("Comparison of Two Most Promising Factors")
-LAV.comparative.plot <- LAV.comparative.plot + theme(legend.position = c(0.35, 0.2))
+#LAV.comparative.plot <- LAV.comparative.plot + theme(legend.position = c(0.35, 0.2))
 for (i in 1:nrow(LAV.valid)) {
     if (LAV.valid$speedbump[i] == "yes") {
         LAV.comparative.plot <- LAV.comparative.plot + 
@@ -449,39 +463,39 @@ Note: Speed bumps are labeled as $\color{red}red$ points on the graph. \newline
 **vert_jolt_range**: 5-sliding-window range of vertical jolt \newline 
 
 ```{r data writing, echo=TRUE}
-jpeg("./Epoch1_LAV.vert_accel_G.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch1_LAV.vert_accel_G.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.vert_accel_G.plot)
 dev.off()
 
-jpeg("./Epoch2_LAV.vert_accel.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch2_LAV.vert_accel.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.vert_accel.plot)
 dev.off()
 
-jpeg("./Epoch3_LAV.vert_accel_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch3_LAV.vert_accel_ratio_speed.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.vert_accel_ratio_speed.plot)
 dev.off()
 
-jpeg("./Epoch4_LAV.sq_vert_accel_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch4_LAV.sq_vert_accel_ratio_speed.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.sq_vert_accel_ratio_speed.plot)
 dev.off()
 
-jpeg("./Epoch5_LAV.vert_jolt.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch5_LAV.vert_jolt.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.vert_jolt.plot)
 dev.off()
 
-jpeg("./Epoch6_LAV.vert_jolt_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch6_LAV.vert_jolt_ratio_speed.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.vert_jolt_ratio_speed.plot)
 dev.off()
 
-jpeg("./Epoch7_LAV.sq_vert_jolt_ratio_speed.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch7_LAV.sq_vert_jolt_ratio_speed.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.sq_vert_jolt_ratio_speed.plot)
 dev.off()
 
-jpeg("./Epoch8_LAV.vert_jolt_5.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch8_LAV.vert_jolt_5.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.vert_jolt_5.plot)
 dev.off()
 
-jpeg("./Epoch9_LAV.comparative.plot.jpeg", width = 1200, height = 750, units = "px")
+jpeg("./Epoch9_LAV.comparative.plot.jpeg", width = 1200, height = 400, units = "px")
 print(LAV.comparative.plot)
 dev.off()
 
